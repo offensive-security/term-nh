@@ -864,6 +864,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             doToggleSoftKeyboard();
         } else if (id == R.id.menu_toggle_function_bar) {
             setFunctionBar(2);
+        } else if (id == R.id.menu_edit_vimrc) {
+            sendKeyStrings(":exe $MYVIMRC == '' ? 'e $HOME/.vimrc' : 'e $MYVIMRC'\r", true);
         } else if (id == R.id.menu_toggle_wakelock) {
             doToggleWakeLock();
         } else if (id == R.id.menu_toggle_wifilock) {
