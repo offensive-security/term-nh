@@ -35,6 +35,21 @@ import android.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.Process;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
 import jackpal.androidterm.emulatorview.TermSession;
 
 import jackpal.androidterm.compat.AndroidCompat;
@@ -116,8 +131,13 @@ public class TermService extends Service implements TermSession.FinishCallback
         notification.contentIntent = pendingIntent;
         compat.startForeground(RUNNING_NOTIFICATION, notification);
 
+        install();
+
         Log.d(TermDebug.LOG_TAG, "TermService started");
         return;
+    }
+
+    private void install() {
     }
 
     @SuppressLint("NewApi")
@@ -127,11 +147,148 @@ public class TermService extends Service implements TermSession.FinishCallback
         String appbase = this.getApplicationInfo().dataDir;
         String appfiles = this.getFilesDir().toString();
         File extfilesdir = (AndroidCompat.SDK >= 8) ? this.getExternalFilesDir(null) : null;
-        String appextfiles = extfilesdir != null ? extfilesdir.toString() : "";
+        String appextfiles = extfilesdir != null ? extfilesdir.toString() : appfiles;
         cmd = cmd.replaceAll("%APPBASE%", appbase);
         cmd = cmd.replaceAll("%APPFILES%", appfiles);
         cmd = cmd.replaceAll("%APPEXTFILES%", appextfiles);
         return cmd;
+    }
+
+    private static String fileToString(File file) throws IOException {
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            StringBuilder sb = new StringBuilder();
+            int c;
+            while ((c = br.read()) != -1) {
+              sb.append((char) c);
+            }
+            return sb.toString();
+        } finally {
+            br.close();
+        }
+    }
+
+    private int copyScript(int id, String fname) {
+        return copyScript(id, fname, 0);
+    }
+
+    @SuppressLint("NewApi")
+    private int copyScript(int id, String fname, long time) {
+        if (id == 0) return -1;
+        BufferedReader br = null;
+        String appfiles = "";
+        String appextfiles = "";
+        try {
+            try {
+                InputStream is = getResources().openRawResource(id);
+                br = new BufferedReader(new InputStreamReader(is));
+                PrintWriter writer = new PrintWriter(this.openFileOutput(fname, MODE_PRIVATE));
+                String str;
+                String appbase = this.getApplicationInfo().dataDir;
+                appfiles = this.getFilesDir().toString();
+                File extfilesdir = (AndroidCompat.SDK >= 8) ? this.getExternalFilesDir(null) : null;
+                appextfiles = extfilesdir != null ? extfilesdir.toString() : appfiles;
+                while ((str = br.readLine()) != null) {
+                    str = str.replace("%APPBASE%", appbase);
+                    str = str.replace("%APPFILES%", appfiles);
+                    str = str.replace("%APPEXTFILES%", appextfiles);
+                    writer.print(str+"\n");
+                }
+                writer.close();
+            } catch (IOException e) {
+                return 1;
+            } finally {
+                if (br != null) br.close();
+            }
+        } catch (IOException e) {
+            return 1;
+        }
+        if (time > 0) {
+            File file = new File(appfiles+"/"+fname);
+            file.setLastModified(time);
+        }
+        return 0;
+    }
+
+    private void exeCmd(String cmd) {
+        try {
+            _exeCmd(cmd);
+        } catch (IOException e) {
+        } catch (InterruptedException e) {
+        }
+    }
+
+    private int _exeCmd(String cmd) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec(cmd);
+        int ret = p.waitFor();
+        return ret;
+    }
+
+    @SuppressLint("NewApi")
+    private long getInstallStatus(String scriptFile, String zipFile) {
+        File file = new File(scriptFile);
+        try {
+            ZipFile z = new ZipFile(new File(this.getApplicationInfo().sourceDir));
+            long time = z.getEntry(zipFile).getTime();
+            long ftime = file.lastModified();
+            if (ftime == time) return 0;
+            return time;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    private InputStream getInputStream(int id) {
+        InputStream is = null;
+        try {
+            is = getResources().openRawResource(id);
+        } catch(Exception e) {
+        }
+        return is;
+    }
+
+    @SuppressLint("NewApi")
+    public void installZip(String path, InputStream is) {
+        if (is == null) return;
+        File outDir = new File(path);
+        outDir.mkdirs();
+        ZipInputStream zin = new ZipInputStream(new BufferedInputStream(is));
+        ZipEntry ze = null;
+        int size;
+        byte[] buffer = new byte[8192];
+
+        try {
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
+                    File file = new File(path+"/"+ze.getName());
+                    if (!file.isDirectory()) file.mkdirs();
+                } else {
+                    File file = new File(path+"/"+ze.getName());
+                    File parentFile = file.getParentFile();
+                    parentFile.mkdirs();
+
+                    FileOutputStream fout = new FileOutputStream(file);
+                    BufferedOutputStream bufferOut = new BufferedOutputStream(fout, buffer.length);
+                    while ((size = zin.read(buffer, 0, buffer.length)) != -1) {
+                        bufferOut.write(buffer, 0, size);
+                    }
+                    bufferOut.flush();
+                    bufferOut.close();
+                    if (ze.getName().startsWith("bin/")) {
+                        if (AndroidCompat.SDK >= 9) file.setExecutable(true, false);
+                    }
+                }
+            }
+
+            byte[] buf = new byte[2048];
+            while (is.available() > 0) {
+                is.read(buf);
+            }
+            buf = null;
+            zin.close();
+        } catch (Exception e) {
+        }
     }
 
     @Override
