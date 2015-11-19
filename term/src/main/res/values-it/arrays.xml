@@ -71,6 +71,7 @@
     <string-array name="entries_color_preference">
         <item>Testo nero su bianco</item>
         <item>Testo bianco su nero</item>
+        <item>NetHunter</item>
         <item>Testo bianco su blu</item>
         <item>Testo verde su nero</item>
         <item>Testo ambra su nero</item>

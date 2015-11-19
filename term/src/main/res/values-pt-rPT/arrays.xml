@@ -65,6 +65,7 @@
     <string-array name="entries_color_preference">
         <item>Texto preto em fundo branco</item>
         <item>Texto branco em fundo preto</item>
+        <item>NetHunter</item>
         <item>Texto branco em fundo azul</item>
         <item>Texto verde em fundo preto</item>
         <item>Texto âmbar em fundo preto</item>

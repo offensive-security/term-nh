@@ -71,6 +71,7 @@
     <string-array name="entries_color_preference">
         <item>Црни текст на белом</item>
         <item>Бели текст на црном</item>
+        <item>NetHunter</item>
         <item>Бели текст на плавом</item>
         <item>Зелени текст на црном</item>
         <item>Јантарни текст на црном</item>

@@ -24,6 +24,7 @@
     <string-array name="entries_color_preference">
         <item>Чёрный на белом</item>
         <item>Белый на чёрном</item>
+        <item>NetHunter</item>
         <item>Белый на синем</item>
         <item>Зелёный на чёрном</item>
         <item>Жёлтый на чёрном</item>

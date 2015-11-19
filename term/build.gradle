@@ -3,29 +3,31 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-
     defaultConfig {
-        applicationId "jackpal.androidterm"
+        applicationId 'com.offsec.nhterm'
         minSdkVersion 4
         targetSdkVersion 22
 
         ndk {
-            moduleName "libjackpal-androidterm5"
+            moduleName "libjackpal-androidterm5nhj1"
             abiFilters 'armeabi', 'mips', 'x86'
             ldLibs "log"
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+        debug {
+            jniDebuggable true
+        }
+    }
+    productFlavors {
     }
 }
 

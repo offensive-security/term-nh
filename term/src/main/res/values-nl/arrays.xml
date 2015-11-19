@@ -70,6 +70,7 @@
     <string-array name="entries_color_preference">
         <item>Zwarte tekst op wit</item>
         <item>Witte tekst op zwart</item>
+        <item>NetHunter</item>
         <item>Witte tekst op blauw</item>
         <item>Groene tekst op zwart</item>
         <item>Oranje tekst op zwart</item>

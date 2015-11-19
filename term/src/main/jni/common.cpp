@@ -34,7 +34,7 @@
 #include "termExec.h"
 #include "fileCompat.h"
 
-#define LOG_TAG "libjackpal-androidterm"
+#define LOG_TAG "libjackpal-androidterm-nhj"
 
 /*
  * Register several native methods for one class.

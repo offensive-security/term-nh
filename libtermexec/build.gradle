@@ -19,11 +19,11 @@ android {
     defaultConfig {
         minSdkVersion 4
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
 
         ndk {
-            moduleName 'libjackpal-termexec2'
+            moduleName 'libjackpal-termexec2nhj1'
             abiFilters 'all'
             ldLibs 'log', 'c'
         }

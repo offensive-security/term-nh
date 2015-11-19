@@ -20,7 +20,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/primary">
     <TextView android:id="@+id/window_list_label"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -36,7 +37,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp" />
-    <view class="jackpal.androidterm.WindowList$CloseButton" android:id="@+id/window_list_close"
+    <view class="com.offsec.nhterm.WindowList$CloseButton" android:id="@+id/window_list_close"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:paddingLeft="15dp"

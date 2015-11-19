@@ -71,6 +71,7 @@
     <string-array name="entries_color_preference">
         <item>하얀 배경에 검은색 글자</item>
         <item>검은 배경에 하얀 글자</item>
+        <item>NetHunter</item>
         <item>파란 배경에 하얀 글자</item>
         <item>검은 배경에 초록색 글자</item>
         <item>검은 배경에 황색 글자</item>

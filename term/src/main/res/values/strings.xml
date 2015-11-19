@@ -15,7 +15,7 @@
  * limitations under the License.
 -->
 <resources>
-   <string name="application_terminal">Terminal Emulator</string>
+   <string name="application_terminal">NetHunter Termj</string>
    <string name="preferences">Preferences</string>
    <string name="new_window">New window</string>
    <string name="close_window">Close window</string>
@@ -41,7 +41,7 @@
    <string name="send_control_key">Send control key</string>
    <string name="send_fn_key">Send fn key</string>
 
-   <string name="window_title">Window %1$d</string>
+   <string name="window_title">%1$d)</string>
 
    <string name="service_notify_text">Terminal session is running</string>
 
@@ -141,9 +141,13 @@
 
   <string name="confirm_window_close_message">Close this window?</string>
 
-  <string name="perm_run_script">Run arbitrary commands in Terminal Emulator</string>
+  <string name="perm_run_script">Run commands in Terminal</string>
+  <string name="perm_run_script_nh">Run commands in Terminal (Kali Linux)</string>
+  <string name="perm_run_script_su">Run commands in Terminal (SU)</string>
   <string name="permdesc_run_script">Allows application to open new windows in Terminal Emulator for Android and run commands in those windows with all of Terminal Emulator for Android\'s permissions, including access to the Internet and your SD Card.</string>
-  <string name="perm_append_to_path">Add commands to Terminal Emulator</string>
+    <string name="permdesc_run_script_nh">Allows application to open new windows in Terminal Emulator for Android and run commands in those windows sended to Kali Linux (Needs Kali Nethunter)</string>
+    <string name="permdesc_run_script_su">Allows application to open new windows in Terminal Emulator for Android and run commands in those windows as Super User (Needs Root)</string>
+    <string name="perm_append_to_path">Add commands to Terminal Emulator</string>
   <string name="permdesc_append_to_path">Allows application to provide additional commands (add directories to the PATH) for Terminal Emulator for Android.</string>
   <string name="perm_prepend_to_path">Override commands in Terminal Emulator</string>
   <string name="permdesc_prepend_to_path">Allows application to override existing commands with its own versions (prepend directories to the PATH) in Terminal Emulator for Android.</string>

@@ -43,6 +43,7 @@
     <string-array name="entries_color_preference">
         <item>Чорний на білому</item>
         <item>Білий на чорному</item>
+        <item>NetHunter</item>
         <item>Білий на синьому</item>
         <item>Зелений на чорному</item>
         <item>Жовтий на чорному</item>

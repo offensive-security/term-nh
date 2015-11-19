@@ -71,6 +71,7 @@
     <string-array name="entries_color_preference">
         <item>Fekete szöveg, fehér háttér</item>
         <item>Fehér szöveg, fekete háttér</item>
+        <item>NetHunter</item>
         <item>Fehér szöveg, kék háttér</item>
         <item>Zöld szöveg, fekete háttér</item>
         <item>Sárga szöveg, fekete háttér</item>

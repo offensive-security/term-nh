@@ -71,6 +71,7 @@
   <string-array name="entries_color_preference">
     <item>Sort tekst på hvit</item>
     <item>Hvit tekst på sort</item>
+      <item>NetHunter</item>
     <item>Hvit tekst på blå</item>
     <item>Grønn tekst på sort</item>
     <item>Orange tekst på sort</item>

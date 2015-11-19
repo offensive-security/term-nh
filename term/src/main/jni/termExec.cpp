@@ -74,7 +74,7 @@ static void android_os_Exec_setPtyUTF8Mode(JNIEnv *env, jobject clazz, jint fd, 
         env->ThrowNew(env->FindClass("java/io/IOException"), "Failed to set terminal UTF-8 mode");
 }
 
-static const char *classPathName = "jackpal/androidterm/Exec";
+static const char *classPathName = "com/offsec/nhterm/Exec";
 static JNINativeMethod method_table[] = {
     { "setPtyWindowSizeInternal", "(IIIII)V",
         (void*) android_os_Exec_setPtyWindowSize},

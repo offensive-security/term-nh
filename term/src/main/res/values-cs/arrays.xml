@@ -65,6 +65,7 @@
     <string-array name="entries_color_preference">
         <item>Černý text na bílém podkladu</item>
         <item>Bílý text na černém podkladu</item>
+        <item>NetHunter</item>
         <item>Bílý text na modrém podkladu</item>
         <item>Zelený text na černém podkladu</item>
         <item>Žlutý text na černém podkladu</item>

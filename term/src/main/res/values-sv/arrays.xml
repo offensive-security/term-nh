@@ -65,6 +65,7 @@
     <string-array name="entries_color_preference">
         <item>Svart text på vit</item>
         <item>Vit text på svart</item>
+        <item>NetHunter</item>
         <item>Vit text på blå</item>
         <item>Grön text på svart</item>
         <item>Orange text på svart</item>

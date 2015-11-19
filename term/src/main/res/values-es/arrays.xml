@@ -71,6 +71,7 @@
     <string-array name="entries_color_preference">
         <item>Negro en fondo blanco</item>
         <item>Blanco en fondo negro</item>
+        <item>NetHunter</item>
         <item>Blanco en fondo azul</item>
         <item>Verde en fondo negro</item>
         <item>Ámbar en fondo negro</item>

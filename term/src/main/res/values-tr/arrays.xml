@@ -59,6 +59,7 @@
     <string-array name="entries_color_preference">
         <item>Beyaz arkaplan üzerinde siyah metin</item>
         <item>Siyah arkaplan üzerinde beyaz metin</item>
+        <item>NetHunter</item>
         <item>Mavi arkaplan üzerinde beyaz metin</item>
         <item>Siyah arkaplan üzerinde yeşil metin</item>
         <item>Siyah arkaplan üzerinde turuncu metin</item>

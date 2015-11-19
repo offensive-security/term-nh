@@ -65,6 +65,7 @@
     <string-array name="entries_color_preference">
         <item>白底黑字</item>
         <item>黑底白字</item>
+        <item>NetHunter</item>
         <item>藍底白字</item>
         <item>黑底綠字</item>
         <item>黑底黄字</item>

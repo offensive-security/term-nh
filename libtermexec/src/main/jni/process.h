@@ -21,13 +21,13 @@
 #include "jni.h"
 #include <android/log.h>
 
-#define LOG_TAG "jackpal-termexec"
+#define LOG_TAG "jackpal-termexec-nhj1"
 
 extern "C" {
-JNIEXPORT jint JNICALL Java_jackpal_androidterm_TermExec_createSubprocessInternal
+JNIEXPORT jint JNICALL Java_com_offsec_nhterm_TermExec_createSubprocessInternal
       (JNIEnv *, jclass, jstring, jobjectArray, jobjectArray, jint);
 
-    JNIEXPORT jint JNICALL Java_jackpal_androidterm_TermExec_waitFor
+    JNIEXPORT jint JNICALL Java_com_offsec_nhterm_TermExec_waitFor
       (JNIEnv *, jclass, jint);
 }
 

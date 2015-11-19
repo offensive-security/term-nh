@@ -65,6 +65,7 @@
     <string-array name="entries_color_preference">
         <item>Text negru pe alb</item>
         <item>Text alb pe negru</item>
+        <item>NetHunter</item>
         <item>Text alb pe albastru</item>
         <item>Text verde pe negru</item>
         <item>Text galben pe negru</item>
