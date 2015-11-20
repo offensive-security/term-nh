@@ -156,13 +156,19 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             TermService.TSBinder binder = (TermService.TSBinder) service;
             mTermService = binder.getService();
             if (mPendingPathBroadcasts <= 0) {
-                populateViewFlipper();
-                populateWindowList();
+               // if(mTermSessions.size() > 0){
+                    Log.d("ssssssss","Tamano = " + curLength);
+                Log.d("sssssss","Tamano = " + oldLength);
+                    populateViewFlipper();
+                    populateWindowList();
+               // }
+
             }
         }
 
         public void onServiceDisconnected(ComponentName arg0) {
             mTermService = null;
+            Log.d("onServiceDisconnected","onServiceDisconnected");
         }
     };
 
@@ -186,7 +192,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             Log.d("new getView", String.valueOf(position));
-
+            Log.d("mPendingPathBroadcasts","Tamano = " + mTermService.getSessions().size());
+            Log.d("mPendingPathBroadcasts","Tamano = " + oldLength);
             TextView label = new TextView(Term.this);
             String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
             label.setText(title);
@@ -205,7 +212,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         }
 
         public void onUpdate() {
-            Log.d("new eq or minor", String.valueOf(mViewFlipper.getDisplayedChild()));
+            Log.d("onUpdate", String.valueOf(mViewFlipper.getDisplayedChild()));
             mActionBar.setSelectedNavigationItem(mViewFlipper.getDisplayedChild());
             notifyDataSetChanged();
         }
@@ -451,41 +458,39 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             throw new IllegalStateException("Failed to bind to TermService!");
         }
     }
+    private void end_populateViewFlipper(){
 
+        mTermSessions.addCallback(this);
+        for (TermSession _session : mTermSessions) {
+            EmulatorView view = createEmulatorView(_session);
+            mViewFlipper.addView(view);
+        }
+        updatePrefs();
+        if (onResumeSelectWindow >= 0) {
+            //mViewFlipper.setDisplayedChild(onResumeSelectWindow);
+            onResumeSelectWindow = -1;
+        }
+        mViewFlipper.onResume();
+    }
     private void populateViewFlipper() {
+
         if (mTermService != null) {
             mTermSessions = mTermService.getSessions();
 
             if (mTermSessions.size() == 0) {
-                try {
-                    mTermSessions.add(createTermSession());
-                } catch (IOException e) {
-                    Toast.makeText(this, "Failed to start terminal session", Toast.LENGTH_LONG).show();
-                    finish();
-                    return;
-                }
+                show_shell_dialog("populateViewFlipper");
+
+            } else{
+                end_populateViewFlipper();
             }
 
-            mTermSessions.addCallback(this);
 
-            for (TermSession session : mTermSessions) {
-                EmulatorView view = createEmulatorView(session);
-                mViewFlipper.addView(view);
-            }
-
-            updatePrefs();
-
-            if (onResumeSelectWindow >= 0) {
-                mViewFlipper.setDisplayedChild(onResumeSelectWindow);
-                onResumeSelectWindow = -1;
-            }
-            mViewFlipper.onResume();
         }
     }
 
     private void populateWindowList() {
         if (mActionBar == null) {
-            Log.d("populateWindowList","in null");
+            Log.d("populateWindowList", "in null");
             return;
         }
         if (mTermSessions != null) {
@@ -496,7 +501,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 Log.d("populateWindowList", "in mWinListAdapter = null");
                 mActionBar.setListNavigationCallbacks(mWinListAdapter, mWinListItemSelected);
                 //mActionBar.setSelectedNavigationItem(position);
-
+                // POC sometimes not workin?
                 if(mTermSessions.getSelectedSession() == 0){
                     Log.d("populateWindowList", "curLength  == null");
                     selectedTab = 0;
@@ -579,17 +584,23 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         finish();
     }
 
-    protected static TermSession createTermSession(Context context, TermSettings settings, String initialCommand) throws IOException {
-        GenericTermSession session = new ShellTermSession(settings, initialCommand);
+    protected static TermSession createTermSession(Context context, TermSettings settings, String initialCommand, String _mShell) throws IOException {
+
+
+
+        Log.d("MM createTermSession", _mShell + "cmd: " + initialCommand);
+        GenericTermSession session = new ShellTermSession(settings, initialCommand, _mShell);  // called from intents
         // XXX We should really be able to fetch this from within TermSession
+
         session.setProcessExitMessage(context.getString(R.string.process_exit_message));
 
         return session;
     }
 
     private TermSession createTermSession() throws IOException {
+        Log.d("MM createTermSession", "inthreow");
         TermSettings settings = mSettings;
-        TermSession session = createTermSession(this, settings, settings.getInitialCommand());
+        TermSession session = createTermSession(this, settings, "", "/system/bin/sh -");
         session.setFinishCallback(mTermService);
         return session;
     }
@@ -784,26 +795,91 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         }
         return super.onOptionsItemSelected(item);
     }
+    private void show_shell_dialog(final String from){
+        Log.d("doCreateWin", "creating");
+        final TermSettings settings = mSettings;
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        //alertDialogBuilder.setView(promptsView);
+        //alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setTitle("Select shell:");
+        alertDialogBuilder.setNegativeButton("Android",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d("CANCELED", "CANCELED");
+                        TermSession session = null;
+                        try {
+                            session = createTermSession(getBaseContext(), settings, "", ShellType.ANDROID_SHELL);
+                            session.setFinishCallback(mTermService);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        mTermSessions.add(session);
+                        if(from == "doCreateNewWindow"){
+                            end_doCreateNewWindow(session);
+                        }
+                        if(from ==  "populateViewFlipper"){
+                            end_populateViewFlipper();
+                        }
+
+                    }
+                })
+                .setPositiveButton("AndroidSu",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.d("Su", "Su");
+                                TermSession session = null;
+                                try {
+                                    session = createTermSession(getBaseContext(), settings, "", ShellType.ANDROID_SU_SHELL);
+                                    session.setFinishCallback(mTermService);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                mTermSessions.add(session);
+                                if(from == "doCreateNewWindow"){
+                                    end_doCreateNewWindow(session);
+                                }
+                                if(from == "populateViewFlipper"){
+                                    end_populateViewFlipper();
+                                };
+                            }
+                        })
+                .setNeutralButton("Kali",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.d("Kali", "Kali");
+                                TermSession session = null;
+                                try {
+                                    session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_SHELL);
+                                    session.setFinishCallback(mTermService);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                mTermSessions.add(session);
+                                if(from.equals("doCreateNewWindow")){
+                                    end_doCreateNewWindow(session);
+                                }
+                                if(from.equals("populateViewFlipper")){
+                                    end_populateViewFlipper();
+                                }
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+    private void end_doCreateNewWindow(TermSession session){
+        TermView view = createEmulatorView(session);
+        view.updatePrefs(mSettings);
+        mViewFlipper.addView(view);
+        mViewFlipper.setDisplayedChild(mViewFlipper.getChildCount() - 1);
+    }
     private void doCreateNewWindow() {
         if (mTermSessions == null) {
             Log.w(TermDebug.LOG_TAG, "Couldn't create new window because mTermSessions == null");
             return;
         }
-
-        try {
-            TermSession session = createTermSession();
-
-            mTermSessions.add(session);
-
-            TermView view = createEmulatorView(session);
-            view.updatePrefs(mSettings);
-
-            mViewFlipper.addView(view);
-            mViewFlipper.setDisplayedChild(mViewFlipper.getChildCount()-1);
-        } catch (IOException e) {
-            Toast.makeText(this, "Failed to create a session", Toast.LENGTH_SHORT).show();
-        }
+        Log.d("doCreateWin", "creating");
+        show_shell_dialog("doCreateNewWindow");
     }
 
     private void confirmCloseWindow() {
@@ -840,11 +916,15 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         mViewFlipper.removeView(view);
         if (mTermSessions.size() != 0) {
             mViewFlipper.showNext();
+        }else {
+            Log.d("NOSCREENS?","?NOSCREENS??");
         }
+
     }
 
     @Override
     protected void onActivityResult(int request, int result, Intent data) {
+        Log.d("onActivityResult?","?onActivityResult??");
         switch (request) {
         case REQUEST_CHOOSE_WINDOW:
             if (result == RESULT_OK && data != null) {
@@ -860,6 +940,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 // Close the activity if user closed all sessions
                 // TODO the left path will be invoked when nothing happened, but this Activity was destroyed!
                 if (mTermSessions == null || mTermSessions.size() == 0) {
+                    Log.d("but this ?","?but this Activity was destroyed!??");
                     mStopServiceOnFinish = true;
                     finish();
                 }
@@ -1011,13 +1092,16 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     public void onUpdate() {
         SessionList sessions = mTermSessions;
         if (sessions == null) {
+            Log.d("onupdateeeeee","sessions == null");
             return;
         }
 
         if (sessions.size() == 0) {
+            Log.d("onupdateeeeee","tamano 0");
             mStopServiceOnFinish = true;
             finish();
         } else if (sessions.size() < mViewFlipper.getChildCount()) {
+            Log.d("onupdateeeeee",sessions.size() + "sessions en el if " + mViewFlipper.getChildCount());
             for (int i = 0; i < mViewFlipper.getChildCount(); ++i) {
                 EmulatorView v = (EmulatorView) mViewFlipper.getChildAt(i);
                 if (!sessions.contains(v.getTermSession())) {

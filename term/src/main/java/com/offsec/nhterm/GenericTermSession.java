@@ -107,7 +107,9 @@ class GenericTermSession extends TermSession {
 
     @Override
     protected void onProcessExit() {
+
         if (mSettings.closeWindowOnProcessExit()) {
+            notifyUpdate();
             finish();
         } else if (mProcessExitMessage != null) {
             try {
@@ -144,7 +146,7 @@ class GenericTermSession extends TermSession {
         if (title != null && title.length() > 0) {
             return defaultTitle +" "+ title;
         } else {
-            return "Window (" + defaultTitle;
+            return defaultTitle + " No title";
         }
     }
 
@@ -212,7 +214,6 @@ class GenericTermSession extends TermSession {
     private static void cacheDescField() throws NoSuchFieldException {
         if (descriptorField != null)
             return;
-
         descriptorField = FileDescriptor.class.getDeclaredField("descriptor");
         descriptorField.setAccessible(true);
     }

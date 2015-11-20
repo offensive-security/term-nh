@@ -37,29 +37,31 @@ public class ShellTermSession extends GenericTermSession {
     private Thread mWatcherThread;
 
     private String mInitialCommand;
-
+    private String mInitialShell;
     private static final int PROCESS_EXITED = 1;
     private Handler mMsgHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (!isRunning()) {
+                Log.d("norunning EXIT","???");
                 return;
             }
             if (msg.what == PROCESS_EXITED) {
+                Log.d("noning SI EXIT","???");
                 onProcessExit((Integer) msg.obj);
             }
         }
     };
 
-    public ShellTermSession(TermSettings settings, String initialCommand) throws IOException {
+    public ShellTermSession(TermSettings settings, String initialCommand, String _mInitialShell) throws IOException {
         super(ParcelFileDescriptor.open(new File("/dev/ptmx"), ParcelFileDescriptor.MODE_READ_WRITE),
                 settings, false);
 
-        initializeSession();
+        initializeSession(_mInitialShell);
 
         setTermOut(new ParcelFileDescriptor.AutoCloseOutputStream(mTermFd));
         setTermIn(new ParcelFileDescriptor.AutoCloseInputStream(mTermFd));
-
+        mInitialShell = _mInitialShell;
         mInitialCommand = initialCommand;
 
         mWatcherThread = new Thread() {
@@ -72,9 +74,10 @@ public class ShellTermSession extends GenericTermSession {
             }
         };
         mWatcherThread.setName("Process watcher");
+        Log.d("STS: ^^",mInitialShell + " cmd: " +  mInitialCommand);
     }
 
-    private void initializeSession() throws IOException {
+    private void initializeSession(String mShell) throws IOException {
         TermSettings settings = mSettings;
 
         String path = System.getenv("PATH");
@@ -98,8 +101,8 @@ public class ShellTermSession extends GenericTermSession {
         env[0] = "TERM=" + settings.getTermType();
         env[1] = "PATH=" + path;
         env[2] = "HOME=" + settings.getHomePath();
-
-        mProcId = createSubprocess(settings.getShell(), env);
+        Log.d("Initialize Sess", settings.getShell());
+        mProcId = createSubprocess(mShell, env);
     }
 
     private String checkPath(String path) {
@@ -125,15 +128,17 @@ public class ShellTermSession extends GenericTermSession {
 
     private void sendInitialCommand(String initialCommand) {
         if (initialCommand.length() > 0) {
-            write(initialCommand + '\r');
+            Log.d("CS: InitialCmd", initialCommand);
+
+            write(initialCommand + '\n');
         }
     }
 
     private int createSubprocess(String shell, String[] env) throws IOException {
+        Log.d("CS: shell", shell);
         ArrayList<String> argList = parse(shell);
         String arg0;
         String[] args;
-
         try {
             arg0 = argList.get(0);
             File file = new File(arg0);
@@ -155,6 +160,7 @@ public class ShellTermSession extends GenericTermSession {
     }
 
     private ArrayList<String> parse(String cmd) {
+        Log.d("CS parse: ", cmd);
         final int PLAIN = 0;
         final int WHITESPACE = 1;
         final int INQUOTE = 2;
@@ -208,6 +214,7 @@ public class ShellTermSession extends GenericTermSession {
 
     @Override
     public void finish() {
+        Log.d("noning FINISH","???");
         hangupProcessGroup();
         super.finish();
     }

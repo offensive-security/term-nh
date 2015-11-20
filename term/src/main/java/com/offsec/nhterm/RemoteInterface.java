@@ -118,11 +118,11 @@ public class RemoteInterface extends Activity {
                 String path = ((Uri) extraStream).getPath();
                 File file = new File(path);
                 String dirPath = file.isDirectory() ? path : file.getParent();
-                openNewWindow("cd " + quoteForBash(dirPath));
+                openNewWindow("cd " + quoteForBash(dirPath), "i action send");
             }
         } else {
             // Intent sender may not have permissions, ignore any extras
-            openNewWindow(null);
+            openNewWindow(null, "i action send");
         }
 
         finish();
@@ -147,22 +147,22 @@ public class RemoteInterface extends Activity {
         return builder.toString();
     }
 
-    protected String openNewWindow(String iInitialCommand) {
-        Log.d("initialCommand","OPENSESAME");
+    protected String openNewWindow(String iInitialCommand, String mShell) {
+        Log.d("initialCommand",iInitialCommand);
         TermService service = getTermService();
         String initialCommand = mSettings.getInitialCommand();
 
         if (!iInitialCommand.equals("")) {
             if (!initialCommand.equals("")) {
                 Log.d("initialCommand",initialCommand);
-                initialCommand += "\r" + iInitialCommand;
+                initialCommand = iInitialCommand;
             } else {
                 initialCommand = iInitialCommand;
             }
         }
 
         try {
-            TermSession session = Term.createTermSession(this, mSettings, initialCommand);
+            TermSession session = Term.createTermSession(this, mSettings, initialCommand, mShell);
 
             session.setFinishCallback(service);
             service.getSessions().add(session);
@@ -181,9 +181,9 @@ public class RemoteInterface extends Activity {
         }
     }
 
-    protected String appendToWindow(String handle, String iInitialCommand) {
+    protected String appendToWindow(String handle, String iInitialCommand, String mShell) {
         TermService service = getTermService();
-
+        Log.d("appendToWindow", iInitialCommand + " <> " + handle);
         // Find the target window
         SessionList sessions = service.getSessions();
         GenericTermSession target = null;
@@ -199,12 +199,12 @@ public class RemoteInterface extends Activity {
 
         if (target == null) {
             // Target window not found, open a new one
-            return openNewWindow(iInitialCommand);
+            return openNewWindow(iInitialCommand, mShell);
         }
 
         if (iInitialCommand != null) {
             target.write(iInitialCommand);
-            target.write('\r');
+            target.write('\n');
         }
 
         Intent intent = new Intent(PRIVACT_SWITCH_WINDOW);

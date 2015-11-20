@@ -55,13 +55,13 @@ public final class RunScriptNetHunter extends RemoteInterface {
 
             if (handle != null) {
                 // Target the request at an existing window if open
-                handle = appendToWindow(handle, command);
+                handle = appendToWindow(handle, command, ShellType.KALI_SHELL);
             } else {
                 // Open a new window
-                handle = openNewWindow(command);
+                handle = openNewWindow(command, ShellType.KALI_SHELL);
             }
             Intent result = new Intent();
-            result.putExtra(EXTRA_WINDOW_HANDLE, 3);
+            result.putExtra(EXTRA_WINDOW_HANDLE, handle);
             setResult(RESULT_OK, result);
 
             finish();

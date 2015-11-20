@@ -67,10 +67,11 @@ public final class RunShortcut extends RemoteInterface {
             String handle = myIntent.getStringExtra(EXTRA_WINDOW_HANDLE);
             if (handle != null) {
                 // Target the request at an existing window if open
-                handle = appendToWindow(handle, command);
+                handle =
+                        appendToWindow(handle, command, "shortcut");
             } else {
                 // Open a new window
-                handle = openNewWindow(command);
+                handle = openNewWindow(command, "shortcut");
             }
             Intent result = new Intent();
             result.putExtra(EXTRA_WINDOW_HANDLE, handle);
