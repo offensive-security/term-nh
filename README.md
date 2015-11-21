@@ -1,32 +1,21 @@
-#Terminal Emulator for Android
+#NetHunter Terminal Emulator
 
-*Note:* Terminal Emulator for Android development is complete. I am not
-accepting pull requests any more.
+This is a new fork of the Android Terminal Emulator so we can adapt it to our neeeds for Kali Linux Nethunter.
 
-Terminal Emulator for Android is a terminal emulator for communicating with the
-built-in Android shell. It emulates a reasonably large subset of Digital
-Equipment Corporation VT-100 terminal codes, so that programs like "vi", "Emacs"
-and "NetHack" will display properly.
+Dependencies running the terminal:
 
-This application was previously named "Android Terminal Emulator". Same great
-application, just with a new name. (The change was made at the request of the
-Android trademark owner.)
+    Nedds a full instalation (included the chroot install) of Kali Nethunter
 
-This code is based on the "Term" application which is included in the Android
-Open Source Project. (Which I also wrote. :-) )
 
-[Download the Terminal Emulator for Android from Google Play](https://play.google.com/store/apps/details?id=jackpal.androidterm)
 
-If you are unable to use the Play Store, you can also
-[download from GitHub](https://jackpal.github.io/Android-Terminal-Emulator/)
+Buiding from sources:
 
-See [Building](docs/Building.md) for build instructions.
+(Todo)
+Mean while see: https://github.com/jmingov/NetHunter-Terminal-Emulator/blob/master/docs/Building.md
 
-Got questions? Please check out the
-[FAQ](http://github.com/jackpal/Android-Terminal-Emulator/wiki/Frequently-Asked-Questions)
-and/or the [Google+ Android Terminal Emulator Community](https://plus.google.com/u/0/communities/106164413936367578283)
-before emailing or adding an issue. Thanks!
 
-Please see the
-[Recent Updates](http://github.com/jackpal/Android-Terminal-Emulator/wiki/Recent-Updates)
-page for recent updates.
+Since the original proyect is "ended" we left here the credits an licenses:
+
+Original author: https://github.com/jackpal
+Original proyect: https://github.com/jackpal/Android-Terminal-Emulator
+License: The same as the original proyect. (Thouse files are [included](https://github.com/jmingov/NetHunter-Terminal-Emulator/blob/master/NOTICE) in this proyect too.)
