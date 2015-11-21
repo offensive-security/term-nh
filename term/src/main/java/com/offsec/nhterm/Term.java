@@ -130,6 +130,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private Integer selectedTab;
     private Integer curLength;
     private Integer oldLength;
+    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog alertDialog = null;
     private BroadcastReceiver mPathReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String path = makePathFromBundle(getResultExtras(false));
@@ -156,13 +158,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             TermService.TSBinder binder = (TermService.TSBinder) service;
             mTermService = binder.getService();
             if (mPendingPathBroadcasts <= 0) {
-               // if(mTermSessions.size() > 0){
-                    Log.d("ssssssss","Tamano = " + curLength);
-                Log.d("sssssss","Tamano = " + oldLength);
                     populateViewFlipper();
                     populateWindowList();
-               // }
-
             }
         }
 
@@ -221,7 +218,10 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private ActionBarCompat.OnNavigationListener mWinListItemSelected = new ActionBarCompat.OnNavigationListener() {
         public boolean onNavigationItemSelected(int position, long id) {
             Log.d("mWinListItemSelected", String.valueOf(mViewFlipper.getDisplayedChild()));
-
+            if(alertDialog != null){
+                alertDialog.dismiss();
+                alertDialog = null;
+            }
             int oldPosition = mViewFlipper.getDisplayedChild();
             if (position != oldPosition) {
                 if (position >= mViewFlipper.getChildCount()) {
@@ -798,8 +798,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private void show_shell_dialog(final String from){
         Log.d("doCreateWin", "creating");
         final TermSettings settings = mSettings;
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        if(alertDialog != null){
+            alertDialog.dismiss();
+            alertDialog = null;
+        }
+        alertDialogBuilder = new AlertDialog.Builder(this);
         //alertDialogBuilder.setView(promptsView);
         //alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setTitle("Select shell:");
@@ -856,15 +859,25 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                     e.printStackTrace();
                                 }
                                 mTermSessions.add(session);
-                                if(from.equals("doCreateNewWindow")){
+                                if (from.equals("doCreateNewWindow")) {
                                     end_doCreateNewWindow(session);
                                 }
-                                if(from.equals("populateViewFlipper")){
+                                if (from.equals("populateViewFlipper")) {
                                     end_populateViewFlipper();
                                 }
                             }
                         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.d("Oncancel", "size: " + mWinListAdapter.getCount());
+                if(mWinListAdapter.getCount() == 0){
+                    finish();
+                }
+            }
+        });
         alertDialog.show();
     }
     private void end_doCreateNewWindow(TermSession session){
