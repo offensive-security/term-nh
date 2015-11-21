@@ -10,12 +10,14 @@ Dependencies running the terminal:
 
 Buiding from sources:
 
-(Todo)
-Mean while see: https://github.com/jmingov/NetHunter-Terminal-Emulator/blob/master/docs/Building.md
+(Todo) see: https://github.com/jmingov/NetHunter-Terminal-Emulator/blob/master/docs/Building.md
 
 
 Since the original proyect is "ended" we left here the credits an licenses:
 
+
 Original author: https://github.com/jackpal
+
 Original proyect: https://github.com/jackpal/Android-Terminal-Emulator
+
 License: The same as the original proyect. (Thouse files are [included](https://github.com/jmingov/NetHunter-Terminal-Emulator/blob/master/NOTICE) in this proyect too.)
