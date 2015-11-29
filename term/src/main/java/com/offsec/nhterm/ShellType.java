@@ -10,4 +10,5 @@ public class ShellType {
     public static final String ANDROID_SHELL = "/system/bin/sh -";
     public static final String ANDROID_SU_SHELL = "/system/xbin/su";
     public static final String KALI_SHELL = "/system/xbin/su -c /system/bin/bootkali";
+    public static final String KALI_LOGIN_SHELL = "/system/xbin/su -c /system/bin/bootkali_login";
 }
