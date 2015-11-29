@@ -853,7 +853,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                 Log.d("Kali", "Kali");
                                 TermSession session = null;
                                 try {
-                                    session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_SHELL);
+                                    session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
                                     session.setFinishCallback(mTermService);
                                 } catch (IOException e) {
                                     e.printStackTrace();
