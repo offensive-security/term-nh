@@ -15,6 +15,11 @@
         android:description="@string/permdesc_run_script"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="dangerous" />
+    <permission android:name="com.offsec.nhterm.permission.RUN_SCRIPT_NH_LOGIN"
+        android:label="@string/perm_run_script_nh"
+        android:description="@string/permdesc_run_script_nh"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous" />
     <permission android:name="com.offsec.nhterm.permission.RUN_SCRIPT_NH"
         android:label="@string/perm_run_script_nh"
         android:description="@string/permdesc_run_script_nh"
@@ -80,6 +85,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
+        <activity android:name="com.offsec.nhterm.RunScriptNetHunterLogin"
+            android:excludeFromRecents="true"
+            android:permission="com.offsec.nhterm.permission.RUN_SCRIPT_NH_LOGIN">
+            <intent-filter>
+                <action android:name="com.offsec.nhterm.RUN_SCRIPT_NH_LOGIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name="com.offsec.nhterm.RunScriptNetHunter"
             android:excludeFromRecents="true"
             android:permission="com.offsec.nhterm.permission.RUN_SCRIPT_NH">
