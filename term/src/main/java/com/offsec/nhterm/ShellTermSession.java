@@ -101,7 +101,7 @@ public class ShellTermSession extends GenericTermSession {
         env[0] = "TERM=" + settings.getTermType();
         env[1] = "PATH=" + path;
         env[2] = "HOME=" + settings.getHomePath();
-        Log.d("Initialize Sess", settings.getShell());
+       // Log.d("Initialize Sess", settings.getShell());
         mProcId = createSubprocess(mShell, env);
     }
 
@@ -121,16 +121,20 @@ public class ShellTermSession extends GenericTermSession {
     @Override
     public void initializeEmulator(int columns, int rows) {
         super.initializeEmulator(columns, rows);
-
         mWatcherThread.start();
         sendInitialCommand(mInitialCommand);
     }
 
-    private void sendInitialCommand(String initialCommand) {
+    private void sendInitialCommand(final String initialCommand) {
         if (initialCommand.length() > 0) {
             Log.d("CS: InitialCmd", initialCommand);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            write(initialCommand + '\n');
+                        }
+                    }, 300);
 
-            write(initialCommand + '\n');
         }
     }
 
