@@ -145,9 +145,9 @@
   <string name="perm_run_script_nh">Run terminal commands (Kali Linux)</string>
   <string name="perm_run_script_su">Run terminal commands (SU)</string>
   <string name="permdesc_run_script">Allow application to run terminal commands in Android Shell</string>
-    <string name="permdesc_run_script_nh">Allow application to run terminal commands in Kali Nethunter Shell</string>
-    <string name="permdesc_run_script_su">Allow application to run terminal commands in Su Shell</string>
-    <string name="perm_append_to_path">Add commands to Terminal Emulator</string>
+  <string name="permdesc_run_script_nh">Allow application to run terminal commands in Kali Nethunter Shell</string>
+  <string name="permdesc_run_script_su">Allow application to run terminal commands in Su Shell</string>
+  <string name="perm_append_to_path">Add commands to Terminal Emulator</string>
   <string name="permdesc_append_to_path">Allows application to provide additional commands (add directories to the PATH) for Terminal Emulator for Android.</string>
   <string name="perm_prepend_to_path">Override commands in Terminal Emulator</string>
   <string name="permdesc_prepend_to_path">Allows application to override existing commands with its own versions (prepend directories to the PATH) in Terminal Emulator for Android.</string>
