@@ -137,7 +137,33 @@ public class TermService extends Service implements TermSession.FinishCallback
         return;
     }
 
-    private void install() {
+    @SuppressLint("NewApi")
+    private boolean install() {
+        String path = this.getFilesDir().toString();
+        long time = getInstallStatus(path+"/install", "res/raw/install");
+        if (time > 0) {
+            int id = getResources().getIdentifier("bin", "raw", getPackageName());
+            installZip(path, getInputStream(id));
+            if (AndroidCompat.SDK < 16) {
+                File file = new File(String.format("%s/lib/libvim_no_pie.so", this.getApplicationInfo().dataDir.toString()));
+                id = getResources().getIdentifier("bin_no_pie", "raw", getPackageName());
+                if (file.exists()) installZip(path, getInputStream(id));
+            }
+            File extfilesdir = (AndroidCompat.SDK >= 8) ? this.getExternalFilesDir(null) : null;
+            String sdcard = extfilesdir != null ? extfilesdir.toString() : path;
+            id = getResources().getIdentifier("terminfo", "raw", getPackageName());
+            installZip(sdcard, getInputStream(id));
+            id = getResources().getIdentifier("runtime", "raw", getPackageName());
+            installZip(sdcard, getInputStream(id));
+            id = getResources().getIdentifier("extra", "raw", getPackageName());
+            installZip(sdcard, getInputStream(id));
+            id = getResources().getIdentifier("install", "raw", getPackageName());
+            copyScript(id, "install", time);
+            exeCmd(String.format("sh %s/install", path));
+            return true;
+        }
+        if (time == 0) return true;
+        return false;
     }
 
     @SuppressLint("NewApi")
