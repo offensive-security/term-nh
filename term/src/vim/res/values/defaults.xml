@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="pref_actionbar_default">3</integer>
+    <string name="pref_color_default" translatable="false">0</string>
+    <string name="pref_actionbar_x_default" translatable="false">1253</string>
+    <string name="pref_initialcommand_default" translatable="false">export APPBASE=%APPBASE%\nexport APPFILES=%APPFILES%\nexport APPEXTFILES=%APPEXTFILES%\nexport PATH=$APPFILES/bin:$PATH\nexport TERMINFO=$APPEXTFILES/terminfo\nexport VIMRUNTIME=$APPEXTFILES/runtime\nexport VIM=$APPEXTFILES\ncd $HOME\n-vim.app</string>
+    <string name="pref_intentcommand_default" translatable="false">:e %s</string>
+    <bool name="pref_do_path_extensions_default">false</bool>
+</resources>

@@ -122,6 +122,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private boolean mAlreadyStarted = false;
     private boolean mStopServiceOnFinish = false;
 
+    private static boolean mVimFlavor;
+
     private Intent TSIntent;
 
     public static final int REQUEST_CHOOSE_WINDOW = 1;
@@ -342,9 +344,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         mSettings = new TermSettings(getResources(), mPrefs);
         mPrefs.registerOnSharedPreferenceChangeListener(this);
 
-        boolean vimflavor = this.getPackageName().matches(".*vim.androidterm.*");
-
-        if (!vimflavor && mSettings.doPathExtensions()) {
+        File file = new File(String.format("%s/lib/libvim.so", this.getApplicationInfo().dataDir.toString()));
+        mVimFlavor = file.exists();
+        if (!mVimFlavor && mSettings.doPathExtensions()) {
             mPathReceiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
                     String path = makePathFromBundle(getResultExtras(false));
@@ -1649,7 +1651,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         setFunctionBarButton(R.id.button_pipe, visibility);
         visibility = mPrefs.getBoolean("functionbar_minus", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_minus, visibility);
-        visibility = mPrefs.getBoolean("functionbar_vim_paste", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_vim_paste", mVimFlavor) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_vim_paste, visibility);
         visibility = mPrefs.getBoolean("functionbar_vim_yank", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_vim_yank, visibility);
