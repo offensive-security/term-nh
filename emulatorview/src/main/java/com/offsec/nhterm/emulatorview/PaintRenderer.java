@@ -143,5 +143,5 @@ class PaintRenderer extends BaseTextRenderer {
     private int mCharHeight;
     private int mCharAscent;
     private int mCharDescent;
-    private static final char[] EXAMPLE_CHAR = {'X'};
+    private static final char[] EXAMPLE_CHAR = {'M'};
 }
