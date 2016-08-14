@@ -1,0 +1,4 @@
+#!/system/bin/sh
+export APPFILES=%APPFILES%
+chmod -R 755 $APPFILES/bin > /dev/null 2>&1
+cat %APPFILES%/version > %APPEXTFILES%/version
