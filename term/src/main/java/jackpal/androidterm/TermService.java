@@ -174,6 +174,9 @@ public class TermService extends Service implements TermSession.FinishCallback
         String appfiles = this.getFilesDir().toString();
         File extfilesdir = (AndroidCompat.SDK >= 8) ? this.getExternalFilesDir(null) : null;
         String appextfiles = extfilesdir != null ? extfilesdir.toString() : appfiles;
+        if (new File(appextfiles+"/vim").exists()) {
+            cmd = "cat %APPEXTFILES%/vim > %APPFILES%/bin/vim\ncat %APPEXTFILES%/xxd > %APPFILES%/bin/xxd\nchmod 755 %APPFILES%/bin/*\nrm %APPEXTFILES%/vim\nrm %APPEXTFILES%/xxd\n" + cmd;
+        }
         cmd = cmd.replaceAll("%APPBASE%", appbase);
         cmd = cmd.replaceAll("%APPFILES%", appfiles);
         cmd = cmd.replaceAll("%APPEXTFILES%", appextfiles);
