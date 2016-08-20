@@ -868,6 +868,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             setFunctionBar(2);
         } else if (id == R.id.menu_edit_vimrc) {
             sendKeyStrings(":exe $MYVIMRC == '' ? 'e $HOME/.vimrc' : 'e $MYVIMRC'\r", true);
+        } else if (id == R.id.menu_update_vim) {
+            updateTermVim();
         } else if (id == R.id.menu_toggle_wakelock) {
             doToggleWakeLock();
         } else if (id == R.id.menu_toggle_wifilock) {
@@ -882,6 +884,26 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             mActionBar.hide();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateTermVim() {
+        TermVimInstaller.update(this, new Runnable() {
+            @Override
+            public void run() {
+                if (mTermService == null) return;
+                try {
+                    new AlertDialog.Builder(Term.this).setTitle(R.string.menu_update_vim).setMessage(R.string.menu_update_vim_success)
+                            .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                } catch (WindowManager.BadTokenException e) {
+                    // Activity finished - ignore.
+                }
+            }
+        });
     }
 
     private static boolean mVimApp = false;
@@ -1216,6 +1238,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             return true;
         case 0xfffffffb:
             doAndroidIntent(mSettings.getHomePath() + "/.intent");
+            return true;
+        case 0xfffffffc:
+            updateTermVim();
             return true;
         default:
             return super.onKeyUp(keyCode, event);

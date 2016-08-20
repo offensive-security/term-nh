@@ -47,6 +47,9 @@
         android:title="@string/toggle_function_bar" />
     <item android:id="@+id/menu_special_keys"
         android:title="@string/special_keys" />
+    <item android:id="@+id/menu_update_vim"
+        android:title="@string/menu_update_vim"
+        android:visible="false" />
     <item android:id="@+id/menu_edit_vimrc"
         android:title="@string/edit_vimrc"
         android:visible="false" />

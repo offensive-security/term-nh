@@ -157,6 +157,8 @@ public class TermService extends Service implements TermSession.FinishCallback
             installZip(sdcard, getInputStream(id));
             id = getResources().getIdentifier("extra", "raw", getPackageName());
             installZip(sdcard, getInputStream(id));
+            id = getResources().getIdentifier("version", "raw", getPackageName());
+            copyScript(id, "version", time);
             id = getResources().getIdentifier("install", "raw", getPackageName());
             copyScript(id, "install", time);
             exeCmd(String.format("sh %s/install", path));

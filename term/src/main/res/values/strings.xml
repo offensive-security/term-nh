@@ -37,6 +37,10 @@
 
    <string name="edit_vimrc">Edit .vimrc</string>
 
+   <string name="menu_update_vim">Update Vim</string>
+   <string name="menu_update_vim_latest">Vim has been already updated.</string>
+   <string name="menu_update_vim_success">Vim has been successfully downloaded.\nPlease restart.</string>
+
    <string name="enable_wakelock">Take WakeLock</string>
    <string name="disable_wakelock">Drop WakeLock</string>
    <string name="enable_wifilock">Take WifiLock</string>
