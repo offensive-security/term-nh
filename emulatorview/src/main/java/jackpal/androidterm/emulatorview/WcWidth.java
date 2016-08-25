@@ -1,4 +1,4 @@
-package com.termux.terminal;
+package jackpal.androidterm.emulatorview;
 
 /**
  * Implementation of wcwidth(3) for Unicode 9.

@@ -560,6 +560,8 @@ class UnicodeTranscript {
 
         if (mAmbiWidth <= 2) {
             return vimCharWidth(codePoint);
+        } else if (mAmbiWidth == 3) {
+            return WcWidth.width(codePoint);
         } else {
             if (Character.charCount(codePoint) == 1) {
                 // Android's getEastAsianWidth() only works for BMP characters

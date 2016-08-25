@@ -76,6 +76,7 @@
     <string-array name="entries_ambiwidth_preference">
         <item>1</item>
         <item>2</item>
+        <item>1 : termux</item>
     </string-array>
 
     <string-array name="entries_color_preference">
