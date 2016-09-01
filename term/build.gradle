@@ -26,8 +26,11 @@ android {
     productFlavors {
         master {
         }
+        termux {
+            setApplicationId("com.termux")
+        }
         vim {
-            setApplicationId("vim.androidterm")
+            setApplicationId("com.termux")
         }
     }
 }

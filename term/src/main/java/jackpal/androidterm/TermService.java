@@ -107,7 +107,14 @@ public class TermService extends Service implements TermSession.FinishCallback
         // should really belong to the Application class, but we don't use one...
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
-        String defValue = getDir("HOME", MODE_PRIVATE).getAbsolutePath();
+        String defValue;
+        if (getResources().getIdentifier("termux", "raw", getPackageName()) != 0) {
+            defValue = getFilesDir().getAbsolutePath() + "/home";
+            File home = new File(defValue);
+            if (!home.exists()) home.mkdir();
+        } else {
+            defValue = getDir("HOME", MODE_PRIVATE).getAbsolutePath();
+        }
         String homePath = prefs.getString("home_path", defValue);
         editor.putString("home_path", homePath);
         editor.commit();
@@ -143,6 +150,8 @@ public class TermService extends Service implements TermSession.FinishCallback
         long time = getInstallStatus(path+"/install", "res/raw/install");
         if (time > 0) {
             int id = getResources().getIdentifier("bin", "raw", getPackageName());
+            installZip(path, getInputStream(id));
+            id = getResources().getIdentifier("termux", "raw", getPackageName());
             installZip(path, getInputStream(id));
             if (AndroidCompat.SDK < 16) {
                 File file = new File(String.format("%s/lib/libvim_no_pie.so", this.getApplicationInfo().dataDir.toString()));

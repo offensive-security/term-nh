@@ -444,6 +444,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         updatePrefs();
         permissionCheckExternalStorage();
         mAlreadyStarted = true;
+
+        String appbase = Term.this.getApplicationInfo().dataDir;
+        if (!new File(appbase+"/lib/libgrep.so").exists()) {
+            installTermux(false);
+        }
     }
 
     public static final int REQUEST_STORAGE = 1;
@@ -949,6 +954,20 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         return super.onOptionsItemSelected(item);
     }
 
+    private void installTermux(boolean force) {
+
+        if ((AndroidCompat.SDK < android.os.Build.VERSION_CODES.LOLLIPOP)
+                || (!force && !Term.this.getPackageName().matches("^.*com.termux.*"))) {
+            return;
+        }
+        String appfiles = Term.this.getFilesDir().toString();
+        if (!force && (new File(appfiles+"/usr/bin/termux-setup-storage").exists())) {
+            return;
+        }
+        TermuxInstaller.setupPath(Term.this);
+        TermuxInstaller.setupIfNeeded(Term.this, null);
+    }
+
     private void updateTermVim() {
         TermVimInstaller.update(this, new Runnable() {
             @Override
@@ -1304,6 +1323,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             return true;
         case 0xfffffffc:
             updateTermVim();
+            return true;
+        case 0xfffffffd:
+            installTermux(true);
             return true;
         default:
             return super.onKeyUp(keyCode, event);

@@ -1710,6 +1710,9 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             case 9998:
                 ((Activity)this.getContext()).onKeyUp(0xfffffffc, null);
                 break;
+            case 9999:
+                ((Activity)this.getContext()).onKeyUp(0xfffffffd, null);
+                break;
             default:
                 break;
             }

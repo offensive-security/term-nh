@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_initialcommand_default" translatable="false">export APPBASE=%APPBASE%\nexport APPFILES=%APPFILES%\nexport APPEXTFILES=%APPEXTFILES%\nexport PATH=$APPFILES/bin:$PATH</string>
+    <bool name="pref_do_path_extensions_default">false</bool>
+</resources>
+
