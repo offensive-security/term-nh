@@ -1,5 +1,6 @@
-package com.termux.app;
+package jackpal.androidterm;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,9 +15,6 @@ import android.system.Os;
 import android.util.Log;
 import android.util.Pair;
 import android.view.WindowManager;
-
-import com.termux.R;
-import com.termux.terminal.EmulatorDebug;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +47,24 @@ import java.util.zip.ZipInputStream;
  * <p/>
  * (5.2) For every other zip entry, extract it into $STAGING_PREFIX and set execute permissions if necessary.
  */
+@SuppressLint("NewApi")
 final class TermuxInstaller {
+    final static String bootstrap_installer_body = "Installing…";
+    final static String bootstrap_error_title = "Unable to install";
+    final static String bootstrap_error_body = "Termux was unable to install the bootstrap packages.\n\nCheck your network connection and try again.";
+    final static String bootstrap_error_abort = "Abort";
+    final static String bootstrap_error_try_again = "Try again";
+    final static String bootstrap_error_not_primary_user_message = "Termux can only be installed on the primary user account.";
+
+    private static String FILES_PATH = "/data/data/com.termux/files";
+    private static String PREFIX_PATH = FILES_PATH + "/usr";
+    private static String HOME_PATH = FILES_PATH + "/home";
+
+    static void setupPath(Activity activity) {
+        FILES_PATH = activity.getApplicationInfo().dataDir+"/files";
+        PREFIX_PATH = FILES_PATH + "/usr";
+        HOME_PATH = FILES_PATH + "/home";
+    }
 
     /** Performs setup if necessary. */
     static void setupIfNeeded(final Activity activity, final Runnable whenDone) {
@@ -58,7 +73,7 @@ final class TermuxInstaller {
         UserManager um = (UserManager) activity.getSystemService(Context.USER_SERVICE);
         boolean isPrimaryUser = um.getSerialNumberForUser(android.os.Process.myUserHandle()) == 0;
         if (!isPrimaryUser) {
-            new AlertDialog.Builder(activity).setTitle(R.string.bootstrap_error_title).setMessage(R.string.bootstrap_error_not_primary_user_message)
+            new AlertDialog.Builder(activity).setTitle(bootstrap_error_title).setMessage(bootstrap_error_not_primary_user_message)
                 .setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -68,18 +83,18 @@ final class TermuxInstaller {
             return;
         }
 
-        final File PREFIX_FILE = new File(TermuxService.PREFIX_PATH);
+        final File PREFIX_FILE = new File(PREFIX_PATH);
         if (PREFIX_FILE.isDirectory()) {
-            whenDone.run();
-            return;
+            // if (whenDone != null)  whenDone.run();
+            // return;
         }
 
-        final ProgressDialog progress = ProgressDialog.show(activity, null, activity.getString(R.string.bootstrap_installer_body), true, false);
+        final ProgressDialog progress = ProgressDialog.show(activity, null, bootstrap_installer_body, true, false);
         new Thread() {
             @Override
             public void run() {
                 try {
-                    final String STAGING_PREFIX_PATH = TermuxService.FILES_PATH + "/usr-staging";
+                    final String STAGING_PREFIX_PATH = FILES_PATH + "/usr-staging";
                     final File STAGING_PREFIX_FILE = new File(STAGING_PREFIX_PATH);
 
                     if (STAGING_PREFIX_FILE.exists()) {
@@ -138,23 +153,23 @@ final class TermuxInstaller {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            whenDone.run();
+                            if (whenDone != null)  whenDone.run();
                         }
                     });
                 } catch (final Exception e) {
-                    Log.e(EmulatorDebug.LOG_TAG, "Bootstrap error", e);
+                    Log.e("termux-installer", "Bootstrap error", e);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
-                                new AlertDialog.Builder(activity).setTitle(R.string.bootstrap_error_title).setMessage(R.string.bootstrap_error_body)
-                                    .setNegativeButton(R.string.bootstrap_error_abort, new OnClickListener() {
+                                new AlertDialog.Builder(activity).setTitle(bootstrap_error_title).setMessage(bootstrap_error_body)
+                                    .setNegativeButton(bootstrap_error_abort, new OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
                                             activity.finish();
                                         }
-                                    }).setPositiveButton(R.string.bootstrap_error_try_again, new OnClickListener() {
+                                    }).setPositiveButton(bootstrap_error_try_again, new OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -226,7 +241,7 @@ final class TermuxInstaller {
         new Thread() {
             public void run() {
                 try {
-                    File storageDir = new File(TermuxService.HOME_PATH, "storage");
+                    File storageDir = new File(HOME_PATH, "storage");
 
                     if (storageDir.exists() && !storageDir.delete()) {
                         Log.e(LOG_TAG, "Could not delete old $HOME/storage");
