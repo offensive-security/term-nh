@@ -17,7 +17,9 @@
 package jackpal.androidterm;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.support.v4.content.ContextCompat;
+import android.system.Os;
 import android.text.TextUtils;
 import jackpal.androidterm.compat.ActionBarCompat;
 import jackpal.androidterm.compat.ActivityCompat;
@@ -57,6 +59,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -66,7 +69,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -502,6 +507,62 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         if (!bindService(TSIntent, mTSConnection, BIND_AUTO_CREATE)) {
             throw new IllegalStateException("Failed to bind to TermService!");
         }
+
+        RELOAD_STYLE_ACTION = getPackageName()+".app.reload_style";
+        registerReceiver(mBroadcastReceiever, new IntentFilter(RELOAD_STYLE_ACTION));
+    }
+
+    private static String RELOAD_STYLE_ACTION = "com.termux.app.reload_style";
+    private final BroadcastReceiver mBroadcastReceiever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String termuxReloadStyle = intent.getStringExtra(RELOAD_STYLE_ACTION);
+            if (termuxReloadStyle.equals("storage")) {
+                setupStorageSymlinks(Term.this);
+                return;
+            }
+        }
+    };
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupStorageSymlinks(final Context context) {
+        if (AndroidCompat.SDK < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
+        try {
+            File storageDir = new File(mSettings.getHomePath(), "storage");
+
+            if (!storageDir.exists() && !storageDir.mkdirs()) {
+                Log.e(TermDebug.LOG_TAG, "Unable to mkdirs() for $HOME/storage");
+                return;
+            }
+
+            File sharedDir = Environment.getExternalStorageDirectory();
+            Os.symlink(sharedDir.getAbsolutePath(), new File(storageDir, "shared").getAbsolutePath());
+
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            Os.symlink(downloadsDir.getAbsolutePath(), new File(storageDir, "downloads").getAbsolutePath());
+
+            File dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+            Os.symlink(dcimDir.getAbsolutePath(), new File(storageDir, "dcim").getAbsolutePath());
+
+            File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            Os.symlink(picturesDir.getAbsolutePath(), new File(storageDir, "pictures").getAbsolutePath());
+
+            File musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+            Os.symlink(musicDir.getAbsolutePath(), new File(storageDir, "music").getAbsolutePath());
+
+            File moviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            Os.symlink(moviesDir.getAbsolutePath(), new File(storageDir, "movies").getAbsolutePath());
+
+            final File[] dirs = context.getExternalFilesDirs(null);
+            if (dirs != null && dirs.length >= 2) {
+                final File externalDir = dirs[1];
+                Os.symlink(externalDir.getAbsolutePath(), new File(storageDir, "external").getAbsolutePath());
+            }
+        } catch (Exception e) {
+            Log.e(TermDebug.LOG_TAG, "Error setting up link", e);
+        }
     }
 
     private void populateViewFlipper() {
@@ -739,6 +800,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     @Override
     protected void onStop() {
+        unregisterReceiver(mBroadcastReceiever);
+
         mViewFlipper.onPause();
         if (mTermSessions != null) {
             mTermSessions.removeCallback(this);
