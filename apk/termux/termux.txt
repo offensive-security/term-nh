@@ -1,0 +1,92 @@
+# 1. Termuxバージョンについて
+
+本ディレクトリにはAndroid Terminal Emulator改変版とTermVimのTermux互換バージョ
+ンのapkファイルが置かれています
+
+TermuxはGoogle Playで配布されている端末エミュレータ＋各種unix系ツールアプリです。
+TermuxはVim専用ではなくandroid上に一般的なLinux環境を実現するためのもので、apt
+コマンドによりインストール可能なclangやsshなど一通りのコマンドが揃っており、Vim
+だけではなくEmacs等も動作します。
+
+「Termux」
+https://play.google.com/store/apps/details?id=com.termux
+https://github.com/termux
+
+また以下に注意点を記していますので、参照してみてください。
+https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android#TOC-Termux
+
+!!! 重要 !!!
+TermuxバージョンはTermux互換アプリなので、オリジナルのTermuxとは同時にインス
+トールできません。
+必ずオリジナルバージョンをアンインストールしてからインストールしてください。
+
+Termux以外の部分については以下を参照してください。
+
+## TermVim
+
+https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android/term-vim
+
+- termux-vim-release.apk (Termuxバージョン)
+
+## Android Terminal Emulator改変版
+
+https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android/android-terminal-emulator-mod
+
+- term-termux-release.apk (Termuxバージョン)
+
+# 2. Temuxコマンドの使用方法
+
+Android Terminal Emulator改変版 (Termuxバージョン)は、初回起動時にTermuxのベー
+スコードが自動的にインストールされます。
+TermVim(Termuxバージョン)は自動ではTermuxがインストールされないため、`:shell`か
+`Ctrl+z`でshellに落ちて、`termux.install`を実行する必要があります。
+
+Termuxがインストールされたら、`termux.bash`でTermuxのbashが起動し、Termuxのコマ
+ンドが使用可能になります。
+
+初回実行時は以下のコマンドを実行してアップデートしてください。
+
+    $ apt update
+    $ apt upgrade
+
+以降はTermuxと同様に動作します。
+ただしEmacsなどでALTキーを使用したい場合、「設定」の「ALTキーでESCを送出」を有
+効にしないと動作しない場合があります。
+
+なおTermuxのVimではUTF系以外の日本語は扱えません。
+TermuxからTermVimバージョンのVimを呼び出したい場合は、`$APPFILES/bin/vim`を実行
+してください。
+
+あとは必要に応じてtermux.bashを実行するか、「設定」の「初期コマンド」や「シェル
+設定」を適切に設定してTermuxを自動起動させるなどしてください。
+
+ただ$TMPDIRを設定する場合は$HOMEか$APPBASE($APPFILES)以下に適当なディレクトリを
+作成して設定することをおすすめします。
+それ以外に$TMPDIRを設定すると一部コマンドが動作しないことがあるようです。
+(termux.bash等では`$APPFILES/usr/tmp`に設定しています)
+
+# 3. Android標準shellからTermuxのコマンドを使用する
+
+Termuxでインストールしたコマンドは基本的にTermuxのbashで動作させることが前提に
+なっています。
+個人的にはTermuxで動作しないコマンドがあるので、普段は標準シェルを使用して、必
+要に応じてTermux上のコマンドをシェルスクリプト経由で起動するという使い方をして
+います。
+
+## 標準shellからTermuxコマンドを呼び出す
+
+例えばTermuxのgitをAndroidの標準shellから使用したい場合は以下のようになります。
+
+Termuxのbashを起動してgitをインストールします。
+    $ termux.bash
+    $ apt install git
+    $ exit
+
+次に`$APPFILES/bin/termux.cmd.sh`を`git`にリネームして実行します。
+
+    $ cp $APPILES/bin/termux.cmd.sh $APPILES/bin/git
+    $ git
+
+(注意)
+termux.cmd.shはファイル名からコマンド名を取得するために`sed`を使用しています。
+うまく動作しない場合はtermux.cmd.shのコマンド起動部分を適切に書き換えてください。
