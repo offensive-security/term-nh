@@ -31,6 +31,7 @@ android:orientation="vertical" >
         android:id="@+id/view_flipper"
         android:layout_weight="1"
         android:layout_width="match_parent"
+        android:background="@android:color/black"
         android:layout_height="0dp" />
 
     <HorizontalScrollView
