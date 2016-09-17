@@ -262,7 +262,7 @@
 
         <ListPreference
             android:key="color"
-            android:defaultValue="@string/pref_color_default"
+            android:defaultValue="1"
             android:title="@string/title_color_preference"
             android:summary="@string/summary_color_preference"
             android:entries="@array/entries_color_preference"
