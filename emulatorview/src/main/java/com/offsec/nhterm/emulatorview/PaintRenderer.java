@@ -19,11 +19,12 @@ package com.offsec.nhterm.emulatorview;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.text.TextPaint;
 import android.util.FloatMath;
 
 
 class PaintRenderer extends BaseTextRenderer {
-    public PaintRenderer(int fontSize, ColorScheme scheme) {
+    public PaintRenderer(int fontSize, ColorScheme scheme, String mTextFont, int mTextLeading) {
         super(scheme);
         mTextPaint = new Paint();
         mTextPaint.setTypeface(Typeface.MONOSPACE);
@@ -124,6 +125,16 @@ class PaintRenderer extends BaseTextRenderer {
                 mTextPaint.setUnderlineText(false);
             }
         }
+    }
+
+    @Override
+    public float getMeasureText(String str) {
+        return 0;
+    }
+
+    @Override
+    public void setImePaint(TextPaint paint) {
+
     }
 
     public int getCharacterHeight() {
