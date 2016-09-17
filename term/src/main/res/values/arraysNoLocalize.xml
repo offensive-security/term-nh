@@ -15,7 +15,7 @@
  * limitations under the License.
  -->
 
- <!-- Don't localize this file -->
+<!-- Don't localize this file -->
 
 <resources>
     <string-array name="entryvalues_statusbar_preference">
@@ -27,6 +27,7 @@
         <!-- <item>0</item> -->
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="entryvalues_orientation_preference">
@@ -71,6 +72,15 @@
         <item>288</item>
     </string-array>
 
+    <string-array name="entryvalues_fontfile_preference">
+        <item>system</item>
+    </string-array>
+
+    <string-array name="entryvalues_ambiwidth_preference">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="entryvalues_color_preference">
         <item>0</item>
         <item>1</item>
@@ -82,6 +92,32 @@
         <item>7</item>
         <item>8</item>
         <item>9</item>
+    </string-array>
+
+    <string-array name="entryvalues_composingtext_preference">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="entryvalues_actionbar_icon_preference">
+        <!--<item>111</item>-->
+        <!--<item>113</item>-->
+        <!--<item>61</item>-->
+        <!--<item>1250</item>-->
+        <item>1251</item>
+        <item>1002</item>
+        <!--<item>1255</item>-->
+        <item>1252</item>
+        <item>1249</item>
+        <!--<item>37</item>-->
+        <!--<item>1247</item>-->
+        <!--<item>76</item>-->
+        <item>1253</item>
+        <!--<item>999</item>-->
     </string-array>
 
     <string-array name="entryvalues_backaction_preference">

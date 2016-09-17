@@ -228,49 +228,49 @@ class TermKeyListener {
 
         public void onPress() {
             switch (mState) {
-            case PRESSED:
-                // This is a repeat before use
-                break;
-            case RELEASED:
-                mState = LOCKED;
-                break;
-            case USED:
-                // This is a repeat after use
-                break;
-            case LOCKED:
-                mState = UNPRESSED;
-                break;
-            default:
-                mState = PRESSED;
-                break;
+                case PRESSED:
+                    // This is a repeat before use
+                    break;
+                case RELEASED:
+                    mState = LOCKED;
+                    break;
+                case USED:
+                    // This is a repeat after use
+                    break;
+                case LOCKED:
+                    mState = UNPRESSED;
+                    break;
+                default:
+                    mState = PRESSED;
+                    break;
             }
         }
 
         public void onRelease() {
             switch (mState) {
-            case USED:
-                mState = UNPRESSED;
-                break;
-            case PRESSED:
-                mState = RELEASED;
-                break;
-            default:
-                // Leave state alone
-                break;
+                case USED:
+                    mState = UNPRESSED;
+                    break;
+                case PRESSED:
+                    mState = RELEASED;
+                    break;
+                default:
+                    // Leave state alone
+                    break;
             }
         }
 
         public void adjustAfterKeypress() {
             switch (mState) {
-            case PRESSED:
-                mState = USED;
-                break;
-            case RELEASED:
-                mState = UNPRESSED;
-                break;
-            default:
-                // Leave state alone
-                break;
+                case PRESSED:
+                    mState = USED;
+                    break;
+                case RELEASED:
+                    mState = UNPRESSED;
+                    break;
+                default:
+                    // Leave state alone
+                    break;
             }
         }
 
@@ -280,15 +280,15 @@ class TermKeyListener {
 
         public int getUIMode() {
             switch (mState) {
-            default:
-            case UNPRESSED:
-                return TextRenderer.MODE_OFF;
-            case PRESSED:
-            case RELEASED:
-            case USED:
-                return TextRenderer.MODE_ON;
-            case LOCKED:
-                return TextRenderer.MODE_LOCKED;
+                default:
+                case UNPRESSED:
+                    return TextRenderer.MODE_OFF;
+                case PRESSED:
+                case RELEASED:
+                case USED:
+                    return TextRenderer.MODE_ON;
+                case LOCKED:
+                    return TextRenderer.MODE_LOCKED;
             }
         }
     }
@@ -341,6 +341,7 @@ class TermKeyListener {
         // Ensure we don't have any left-over modifier state when switching
         // views.
         mHardwareControlKey = false;
+        mAltControlKey = false;
     }
 
     public void onResume() {
@@ -352,6 +353,15 @@ class TermKeyListener {
             mControlKey.onPress();
         } else {
             mControlKey.onRelease();
+        }
+        updateCursorMode();
+    }
+
+    public void handleAltKey(boolean down) {
+        if (down) {
+            mAltKey.onPress();
+        } else {
+            mAltKey.onRelease();
         }
         updateCursorMode();
     }
@@ -425,7 +435,7 @@ class TermKeyListener {
     }
 
     public int mapControlChar(int ch) {
-        return mapControlChar(mHardwareControlKey || mControlKey.isActive(), mFnKey.isActive(), ch);
+        return mapControlChar(mAltControlKey || mHardwareControlKey || mControlKey.isActive(), mFnKey.isActive(), ch);
     }
 
     public int mapControlChar(boolean control, boolean fn, int ch) {
@@ -512,7 +522,7 @@ class TermKeyListener {
      *
      */
     public void keyDown(int keyCode, KeyEvent event, boolean appMode,
-            boolean allowToggle) throws IOException {
+                        boolean allowToggle) throws IOException {
         if (LOG_KEYS) {
             Log.i(TAG, "keyDown(" + keyCode + "," + event + "," + appMode + "," + allowToggle + ")");
         }
@@ -523,102 +533,102 @@ class TermKeyListener {
         boolean chordedCtrl = false;
         boolean setHighBit = false;
         switch (keyCode) {
-        case KeyEvent.KEYCODE_ALT_RIGHT:
-        case KeyEvent.KEYCODE_ALT_LEFT:
-            if (allowToggle) {
-                mAltKey.onPress();
-                updateCursorMode();
-            }
-            break;
-
-        case KeyEvent.KEYCODE_SHIFT_LEFT:
-        case KeyEvent.KEYCODE_SHIFT_RIGHT:
-            if (allowToggle) {
-                mCapKey.onPress();
-                updateCursorMode();
-            }
-            break;
-
-        case KEYCODE_CTRL_LEFT:
-        case KEYCODE_CTRL_RIGHT:
-            // Ignore the control key.
-            return;
-
-        case KEYCODE_CAPS_LOCK:
-            // Ignore the capslock key.
-            return;
-
-        case KEYCODE_FUNCTION:
-            // Ignore the function key.
-            return;
-
-        case KeyEvent.KEYCODE_BACK:
-            result = mBackKeyCode;
-            break;
-
-        default: {
-            int metaState = event.getMetaState();
-            chordedCtrl = ((META_CTRL_ON & metaState) != 0);
-            boolean effectiveCaps = allowToggle &&
-                    (mCapKey.isActive());
-            boolean effectiveAlt = allowToggle && mAltKey.isActive();
-            int effectiveMetaState = metaState & (~META_CTRL_MASK);
-            if (effectiveCaps) {
-                effectiveMetaState |= KeyEvent.META_SHIFT_ON;
-            }
-            if (!allowToggle && (effectiveMetaState & META_ALT_ON) != 0) {
-                effectiveAlt = true;
-            }
-            if (effectiveAlt) {
-                if (mAltSendsEsc) {
-                    mTermSession.write(new byte[]{0x1b},0,1);
-                    effectiveMetaState &= ~KeyEvent.META_ALT_MASK;
-                } else if (SUPPORT_8_BIT_META) {
-                    setHighBit = true;
-                    effectiveMetaState &= ~KeyEvent.META_ALT_MASK;
-                } else {
-                    // Legacy behavior: Pass Alt through to allow composing characters.
-                    effectiveMetaState |= KeyEvent.META_ALT_ON;
+            case KeyEvent.KEYCODE_ALT_RIGHT:
+            case KeyEvent.KEYCODE_ALT_LEFT:
+                if (allowToggle) {
+                    mAltKey.onPress();
+                    updateCursorMode();
                 }
-            }
+                break;
 
-            // Note: The Hacker keyboard IME key labeled Alt actually sends Meta.
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
+            case KeyEvent.KEYCODE_SHIFT_RIGHT:
+                if (allowToggle) {
+                    mCapKey.onPress();
+                    updateCursorMode();
+                }
+                break;
 
+            case KEYCODE_CTRL_LEFT:
+            case KEYCODE_CTRL_RIGHT:
+                // Ignore the control key.
+                return;
 
-            if ((metaState & KeyEvent.META_META_ON) != 0) {
-                if (mAltSendsEsc) {
-                    mTermSession.write(new byte[]{0x1b},0,1);
-                    effectiveMetaState &= ~KeyEvent.META_META_MASK;
-                } else {
-                    if (SUPPORT_8_BIT_META) {
+            case KEYCODE_CAPS_LOCK:
+                // Ignore the capslock key.
+                return;
+
+            case KEYCODE_FUNCTION:
+                // Ignore the function key.
+                return;
+
+            case KeyEvent.KEYCODE_BACK:
+                result = mBackKeyCode;
+                break;
+
+            default: {
+                int metaState = event.getMetaState();
+                chordedCtrl = ((META_CTRL_ON & metaState) != 0);
+                boolean effectiveCaps = allowToggle &&
+                        (mCapKey.isActive());
+                boolean effectiveAlt = allowToggle && mAltKey.isActive();
+                int effectiveMetaState = metaState & (~META_CTRL_MASK);
+                if (effectiveCaps) {
+                    effectiveMetaState |= KeyEvent.META_SHIFT_ON;
+                }
+                if (!allowToggle && (effectiveMetaState & META_ALT_ON) != 0) {
+                    effectiveAlt = true;
+                }
+                if (effectiveAlt) {
+                    if (mAltSendsEsc) {
+                        mTermSession.write(new byte[]{0x1b},0,1);
+                        effectiveMetaState &= ~KeyEvent.META_ALT_MASK;
+                    } else if (SUPPORT_8_BIT_META) {
                         setHighBit = true;
-                        effectiveMetaState &= ~KeyEvent.META_META_MASK;
+                        effectiveMetaState &= ~KeyEvent.META_ALT_MASK;
+                    } else {
+                        // Legacy behavior: Pass Alt through to allow composing characters.
+                        effectiveMetaState |= KeyEvent.META_ALT_ON;
                     }
                 }
-            }
-            result = event.getUnicodeChar(effectiveMetaState);
 
-            if ((result & KeyCharacterMap.COMBINING_ACCENT) != 0) {
-                if (LOG_COMBINING_ACCENT) {
-                    Log.i(TAG, "Got combining accent " + result);
-                }
-                mCombiningAccent = result & KeyCharacterMap.COMBINING_ACCENT_MASK;
-                return;
-            }
-            if (mCombiningAccent != 0) {
-                int unaccentedChar = result;
-                result = KeyCharacterMap.getDeadChar(mCombiningAccent, unaccentedChar);
-                if (LOG_COMBINING_ACCENT) {
-                    Log.i(TAG, "getDeadChar(" + mCombiningAccent + ", " + unaccentedChar + ") -> " + result);
-                }
-                mCombiningAccent = 0;
-            }
+                // Note: The Hacker keyboard IME key labeled Alt actually sends Meta.
 
-            break;
+
+                if ((metaState & KeyEvent.META_META_ON) != 0) {
+                    if (mAltSendsEsc) {
+                        mTermSession.write(new byte[]{0x1b},0,1);
+                        effectiveMetaState &= ~KeyEvent.META_META_MASK;
+                    } else {
+                        if (SUPPORT_8_BIT_META) {
+                            setHighBit = true;
+                            effectiveMetaState &= ~KeyEvent.META_META_MASK;
+                        }
+                    }
+                }
+                result = event.getUnicodeChar(effectiveMetaState);
+
+                if ((result & KeyCharacterMap.COMBINING_ACCENT) != 0) {
+                    if (LOG_COMBINING_ACCENT) {
+                        Log.i(TAG, "Got combining accent " + result);
+                    }
+                    mCombiningAccent = result & KeyCharacterMap.COMBINING_ACCENT_MASK;
+                    return;
+                }
+                if (mCombiningAccent != 0) {
+                    int unaccentedChar = result;
+                    result = KeyCharacterMap.getDeadChar(mCombiningAccent, unaccentedChar);
+                    if (LOG_COMBINING_ACCENT) {
+                        Log.i(TAG, "getDeadChar(" + mCombiningAccent + ", " + unaccentedChar + ") -> " + result);
+                    }
+                    mCombiningAccent = 0;
+                }
+
+                break;
             }
         }
 
-        boolean effectiveControl = chordedCtrl || mHardwareControlKey || (allowToggle && mControlKey.isActive());
+        boolean effectiveControl = chordedCtrl || mAltControlKey || mHardwareControlKey || (allowToggle && mControlKey.isActive());
         boolean effectiveFn = allowToggle && mFnKey.isActive();
 
         result = mapControlChar(effectiveControl, effectiveFn, result);
@@ -662,22 +672,53 @@ class TermKeyListener {
                 KeyCharacterMapCompat.MODIFIER_BEHAVIOR_CHORDED_OR_TOGGLED;
     }
 
+    private boolean mThumbCtrl = false;
+    public void setThumbCtrl(boolean val) {
+        mThumbCtrl = val;
+    }
+
+    private boolean mJpYenRo = false;
+    public void setJpYenRo(boolean val) {
+        mJpYenRo = val;
+    }
+
+    private boolean mSwapESC2HZ = false;
+    public void setSwapESC2HZ(boolean val) {
+        mSwapESC2HZ = val;
+    }
+
+    private boolean mAltControlKey = false;
     public boolean handleKeyCode(int keyCode, KeyEvent event, boolean appMode) throws IOException {
         if (keyCode == 95 || keyCode == 211 || keyCode == 212) {
             // SWITCH_CHARSET, ZENKAKU_HANKAKU, EISU
             return true;
         }
         if (keyCode >= 213 && keyCode <= 215) {
-            // ignore HENKAN, MUHENKAN, KATAKANA_HIRAGANA
+            // HENKAN, MUHENKAN, KATAKANA_HIRAGANA
+            if (mThumbCtrl) mAltControlKey = true;
             return true;
         }
+        String altString = "";
+        if (mSwapESC2HZ && (keyCode == 111 || keyCode == 68 || keyCode == 211)) {
+            // ESC 111, GRAVE 68, ZENKAKU_HANKAKU 211
+            altString = keyCode != 111 ? "\033" : "`";
+        }
+        if (mJpYenRo && (keyCode == 216 || keyCode == 217)) {
+            // YEN 216, Ro 217
+            altString = keyCode == 216 ? "`" : "-";
+        }
+        if ((altString != "") && ((event.getMetaState() & META_SHIFT_ON) != 0)) {
+            if (altString == "`") altString = "~";
+            else if (altString == "-") altString = "_";
+        }
+
         String code = null;
         if (event != null) {
             int keyMod = 0;
             // META_CTRL_ON was added only in API 11, so don't use it,
             // use our own tracking of Ctrl key instead.
             // (event.getMetaState() & META_CTRL_ON) != 0
-            if (mHardwareControlKey || mControlKey.isActive()) {
+            if (mAltControlKey || mHardwareControlKey || mControlKey.isActive()) {
                 keyMod |= KEYMOD_CTRL;
             }
             if ((event.getMetaState() & META_ALT_ON) != 0) {
@@ -702,6 +743,7 @@ class TermKeyListener {
             }
         }
 
+        if (altString != "") code = altString;
         if (code != null) {
             if (EmulatorDebug.LOG_CHARACTERS_FLAG) {
                 byte[] bytes = code.getBytes();
@@ -721,29 +763,35 @@ class TermKeyListener {
     public void keyUp(int keyCode, KeyEvent event) {
         boolean allowToggle = isEventFromToggleDevice(event);
         switch (keyCode) {
-        case KeyEvent.KEYCODE_ALT_LEFT:
-        case KeyEvent.KEYCODE_ALT_RIGHT:
-            if (allowToggle) {
-                mAltKey.onRelease();
-                updateCursorMode();
-            }
-            break;
-        case KeyEvent.KEYCODE_SHIFT_LEFT:
-        case KeyEvent.KEYCODE_SHIFT_RIGHT:
-            if (allowToggle) {
-                mCapKey.onRelease();
-                updateCursorMode();
-            }
-            break;
+            case 213:
+            case 214:
+            case 215:
+                // HENKAN, MUHENKAN, KATAKANA_HIRAGANA
+                if (mThumbCtrl) mAltControlKey = false;
+                break;
+            case KeyEvent.KEYCODE_ALT_LEFT:
+            case KeyEvent.KEYCODE_ALT_RIGHT:
+                if (allowToggle) {
+                    mAltKey.onRelease();
+                    updateCursorMode();
+                }
+                break;
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
+            case KeyEvent.KEYCODE_SHIFT_RIGHT:
+                if (allowToggle) {
+                    mCapKey.onRelease();
+                    updateCursorMode();
+                }
+                break;
 
-        case KEYCODE_CTRL_LEFT:
-        case KEYCODE_CTRL_RIGHT:
-            // ignore control keys.
-            break;
+            case KEYCODE_CTRL_LEFT:
+            case KEYCODE_CTRL_RIGHT:
+                // ignore control keys.
+                break;
 
-        default:
-            // Ignore other keyUps
-            break;
+            default:
+                // Ignore other keyUps
+                break;
         }
     }
 

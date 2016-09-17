@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- -->
+    <!--
+     * Copyright (C) 2007 The Android Open Source Project
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *      http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     -->
 
 <resources>
     <string-array name="entries_statusbar_preference">
@@ -25,6 +25,7 @@
         <!-- <item>Action bar disabled</item> -->
         <item>Always show action bar</item>
         <item>Hide action bar (touch top of screen or Menu key to show)</item>
+        <item>Action bar disabled</item>
     </string-array>
 
     <string-array name="entries_orientation_preference">
@@ -68,10 +69,18 @@
         <item>288 pt</item>
     </string-array>
 
+    <string-array name="entries_fontfile_preference">
+        <item>system</item>
+    </string-array>
+
+    <string-array name="entries_ambiwidth_preference">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="entries_color_preference">
         <item>Black text on white</item>
         <item>White text on black</item>
-        <item>NetHunter</item>
         <item>White text on blue</item>
         <item>Green text on black</item>
         <item>Amber text on black</item>
@@ -80,6 +89,32 @@
         <item>Solarized Light</item>
         <item>Solarized Dark</item>
         <item>Linux Console</item>
+    </string-array>
+
+    <string-array name="entries_composingtext_preference">
+        <item>None</item>
+        <item>Underline</item>
+        <item>Autodetect</item>
+        <item>ATOK</item>
+        <item>Google IME</item>
+        <item>Default</item>
+    </string-array>
+
+    <string-array name="entries_actionbar_icon_preference">
+        <!--<item>Sends ESC to terminal</item>-->
+        <!--<item>Sends CTRL to terminal</item>-->
+        <!--<item>Sends TAB to terminal</item>-->
+        <!--<item>Create Window</item>-->
+        <item>Close Window</item>
+        <item>Toggle soft keyboard</item>
+        <!--<item>Toggle function bar</item>-->
+        <item>Choose input method</item>
+        <item>Paste</item>
+        <!--<item>Sends i from terminal</item>-->
+        <!--<item>Sends : from terminal</item>-->
+        <!--<item>Sends / from terminal</item>-->
+        <item>Quit Vim</item>
+        <!--<item>None</item>-->
     </string-array>
 
     <string-array name="entries_backaction_preference">

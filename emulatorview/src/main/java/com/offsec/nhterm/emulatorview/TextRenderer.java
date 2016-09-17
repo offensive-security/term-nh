@@ -17,6 +17,7 @@
 package com.offsec.nhterm.emulatorview;
 
 import android.graphics.Canvas;
+import android.text.TextPaint;
 
 /**
  * Text renderer interface
@@ -57,7 +58,9 @@ interface TextRenderer {
      * @param cursorMode The cursor mode (used to show state of shift/control/alt/fn locks.
      */
     void drawTextRun(Canvas canvas, float x, float y,
-            int lineOffset, int runWidth, char[] text,
-            int index, int count, boolean selectionStyle, int textStyle,
-            int cursorOffset, int cursorIndex, int cursorIncr, int cursorWidth, int cursorMode);
+                     int lineOffset, int runWidth, char[] text,
+                     int index, int count, boolean selectionStyle, int textStyle,
+                     int cursorOffset, int cursorIndex, int cursorIncr, int cursorWidth, int cursorMode);
+    float getMeasureText(String str);
+    void setImePaint(TextPaint paint);
 }
