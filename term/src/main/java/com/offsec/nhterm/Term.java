@@ -426,6 +426,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         mHaveFullHwKeyboard = checkHaveFullHwKeyboard(getResources().getConfiguration());
 
+        if (mFunctionBar == -1) mFunctionBar = mSettings.showFunctionBar() ? 1 : 0;
+        if (mFunctionBar == 0) setFunctionBar(mFunctionBar);
+
         updatePrefs();
         mAlreadyStarted = true;
     }
@@ -571,6 +574,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         if (mStopServiceOnFinish) {
             stopService(TSIntent);
+            mFunctionBar = -1;
         }
         mTermService = null;
         mTSConnection = null;
