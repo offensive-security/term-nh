@@ -7,6 +7,7 @@ package com.offsec.nhterm;
 // todo: Find a good way to get the paths
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 
 public class ShellType {

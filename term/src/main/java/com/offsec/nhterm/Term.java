@@ -34,12 +34,14 @@ import com.offsec.nhterm.emulatorview.compat.KeycodeConstants;
 import com.offsec.nhterm.util.SessionList;
 import com.offsec.nhterm.util.TermSettings;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import android.view.View.OnClickListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -80,6 +82,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.R.attr.button;
 
 /**
  * A terminal emulator activity.
@@ -860,19 +864,36 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("Kali", "Kali");
-                                TermSession session = null;
+
+                                String filename = "/system/bin/bootkali_login";
+                                String chroot_dir = "/data/local/nhsystem/kali-armhf"; // Not sure if I can wildcard this
+
+                                File filePath = new File(filename);
+                                File chrootPath = new File(chroot_dir);
+
                                 try {
-                                    session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
-                                    session.setFinishCallback(mTermService);
+                                    if(!isSymlink(filePath)){
+                                        NotFound(filename);
+                                    } else if (!isSymlink(chrootPath)){
+                                        NotFound(chroot_dir);
+                                    } else {
+                                        TermSession session = null;
+                                        try {
+                                            session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
+                                            session.setFinishCallback(mTermService);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        mTermSessions.add(session);
+                                        if (from.equals("doCreateNewWindow")) {
+                                            end_doCreateNewWindow(session);
+                                        }
+                                        if (from.equals("populateViewFlipper")) {
+                                            end_populateViewFlipper();
+                                        }
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }
-                                mTermSessions.add(session);
-                                if (from.equals("doCreateNewWindow")) {
-                                    end_doCreateNewWindow(session);
-                                }
-                                if (from.equals("populateViewFlipper")) {
-                                    end_populateViewFlipper();
                                 }
                             }
                         });
@@ -889,6 +910,52 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         });
         alertDialog.show();
     }
+
+    // Check for symlink for bootkali
+    // http://stackoverflow.com/questions/813710/java-1-6-determine-symbolic-links/813730#813730
+    public static boolean isSymlink(File file) throws IOException {
+        if (file == null)
+            throw new NullPointerException("File must not be null");
+        File canon;
+        if (file.getParent() == null) {
+            canon = file;
+        } else {
+            File canonDir = file.getParentFile().getCanonicalFile();
+            canon = new File(canonDir, file.getName());
+        }
+        return !canon.getCanonicalFile().equals(canon.getAbsoluteFile());
+    }
+
+    private void NotFound(String text){
+
+        String msg = "";
+
+        if (text == "/system/bin/bootkali_login"){
+            msg = "Please run Nethunter Application to generate!";
+        } else if (text == "/data/local/nhsystem/kali-armhf" ){
+            msg = "Missing chroot.  You need to install from Chroot Manager";
+        }
+        /// Do something for not found text (alertDialog)
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        //alertDialogBuilder.setView(promptsView);
+        //alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setTitle("Error");
+        alertDialogBuilder.setMessage("Could not find:\n" + text + ":\n" + msg );
+        alertDialogBuilder.setNegativeButton("OK!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                            // close
+                            finish();
+                            System.exit(0);
+                        }
+                    });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     private void end_doCreateNewWindow(TermSession session){
         TermView view = createEmulatorView(session);
         view.updatePrefs(mSettings);
