@@ -869,12 +869,12 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                 String chroot_dir = "/data/local/nhsystem/kali-armhf"; // Not sure if I can wildcard this
 
                                 File filePath = new File(filename);
-                                File chrootPath = new File(chroot_dir);
+                                //File chrootPath = new File(chroot_dir);
 
                                 try {
                                     if(!isSymlink(filePath)){
                                         NotFound(filename);
-                                    } else if (!isSymlink(chrootPath)){
+                                    } else if (!dir_exists(chroot_dir)){
                                         NotFound(chroot_dir);
                                     } else {
                                         TermSession session = null;
@@ -924,6 +924,15 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             canon = new File(canonDir, file.getName());
         }
         return !canon.getCanonicalFile().equals(canon.getAbsoluteFile());
+    }
+
+    public boolean dir_exists(String dir_path)
+    {
+        boolean ret = false;
+        File dir = new File(dir_path);
+        if(dir.exists() && dir.isDirectory())
+            ret = true;
+        return ret;
     }
 
     private void NotFound(String text){
