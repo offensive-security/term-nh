@@ -25,11 +25,8 @@ public class      ColorValue
   private       EditText            value;
   private final int[]               color=      {0xFF, 0, 0, 0};
   private       boolean             started=    false;
-  private       AlertDialogCompat.Builder builder;
   private       boolean             barLock=    false;
   private final boolean[]           locks=      {false, false, false, false};
-  private final int                 FP=         LinearLayout.LayoutParams.FILL_PARENT;
-  private final int                 WC=         LinearLayout.LayoutParams.WRAP_CONTENT;
   private final ImageView           imgview;
   private final String              result[];
   private       String              imgtext="";
@@ -46,7 +43,7 @@ public class      ColorValue
   public void colorValue()
   {
     final int     arraySizes=  4;
-    builder=      AlertDialogCompat.newInstanceBuilder(context, AlertDialogCompat.THEME_HOLO_DARK);
+    AlertDialogCompat.Builder builder = AlertDialogCompat.newInstanceBuilder(context, AlertDialogCompat.THEME_HOLO_DARK);
     LinearLayout  lv=new LinearLayout(context);
                   lv.setOrientation(LinearLayout.VERTICAL);
     String  lab[]={
@@ -91,6 +88,7 @@ public class      ColorValue
       sb[i].setSecondaryProgress(color[i]);
       sb[i].setTag(i);
       sb[i].setBackgroundColor(0xFF<<24|(color[i]<<(24-i*8)));
+      int WC = LinearLayout.LayoutParams.WRAP_CONTENT;
       sb[i].setLayoutParams(new LinearLayout.LayoutParams(WC, WC, 1));
       sb[i].setOnSeekBarChangeListener(
         new SeekBar.OnSeekBarChangeListener()
@@ -138,6 +136,7 @@ public class      ColorValue
       lh.addView(tv);
       lh.addView(sb[i]);
       lh.addView(lk[i]);
+      int FP = LinearLayout.LayoutParams.FILL_PARENT;
       lv.addView(lh, FP, WC);
     }
 {//Evaluating hex windows.

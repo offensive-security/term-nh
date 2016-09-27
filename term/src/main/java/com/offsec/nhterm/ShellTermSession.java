@@ -37,7 +37,6 @@ public class ShellTermSession extends GenericTermSession {
     private Thread mWatcherThread;
 
     private String mInitialCommand;
-    private String mInitialShell;
     private static final int PROCESS_EXITED = 1;
     private Handler mMsgHandler = new Handler() {
         @Override
@@ -61,7 +60,7 @@ public class ShellTermSession extends GenericTermSession {
 
         setTermOut(new ParcelFileDescriptor.AutoCloseOutputStream(mTermFd));
         setTermIn(new ParcelFileDescriptor.AutoCloseInputStream(mTermFd));
-        mInitialShell = _mInitialShell;
+        String mInitialShell = _mInitialShell;
         mInitialCommand = initialCommand;
 
         mWatcherThread = new Thread() {
@@ -74,7 +73,7 @@ public class ShellTermSession extends GenericTermSession {
             }
         };
         mWatcherThread.setName("Process watcher");
-        Log.d("STS: ^^",mInitialShell + " cmd: " +  mInitialCommand);
+        Log.d("STS: ^^", mInitialShell + " cmd: " +  mInitialCommand);
     }
 
     private void initializeSession(String mShell) throws IOException {

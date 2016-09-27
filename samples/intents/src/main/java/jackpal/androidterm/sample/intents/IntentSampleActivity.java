@@ -67,7 +67,7 @@ public class IntentSampleActivity extends Activity
     }
 
     private void addClickListener(int buttonId, OnClickListener onClickListener) {
-        ((Button) findViewById(buttonId)).setOnClickListener(onClickListener);
+        findViewById(buttonId).setOnClickListener(onClickListener);
     }
 
     protected void onActivityResult(int request, int result, Intent data) {

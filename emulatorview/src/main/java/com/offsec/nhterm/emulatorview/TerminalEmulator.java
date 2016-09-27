@@ -1798,10 +1798,9 @@ class TerminalEmulator {
 
     private void unknownParameter(int parameter) {
         if (EmulatorDebug.LOG_UNKNOWN_ESCAPE_SEQUENCES) {
-            StringBuilder buf = new StringBuilder();
-            buf.append("Unknown parameter");
-            buf.append(parameter);
-            logError(buf.toString());
+            String buf = "Unknown parameter" +
+                    parameter;
+            logError(buf);
         }
     }
 

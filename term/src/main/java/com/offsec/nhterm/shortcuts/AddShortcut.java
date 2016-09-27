@@ -241,7 +241,7 @@ public class      AddShortcut
       }
       StringBuilder cmd=new StringBuilder();
       if(path!=null      && !path.equals(""))      cmd.append(RemoteInterface.quoteForBash(path));
-      if(arguments!=null && !arguments.equals("")) cmd.append(" " + arguments);
+      if(arguments!=null && !arguments.equals("")) cmd.append(" ").append(arguments);
       String cmdStr=cmd.toString();
       String cmdEnc=null;
       try

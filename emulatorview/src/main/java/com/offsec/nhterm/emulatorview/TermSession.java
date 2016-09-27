@@ -29,6 +29,7 @@ import java.nio.charset.CodingErrorAction;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * A terminal session, consisting of a VT100 terminal emulator and its
@@ -75,17 +76,17 @@ public class TermSession {
 
     private boolean mDefaultUTF8Mode;
 
-    private Thread mReaderThread;
-    private ByteQueue mByteQueue;
-    private byte[] mReceiveBuffer;
+    private final Thread mReaderThread;
+    private final ByteQueue mByteQueue;
+    private final byte[] mReceiveBuffer;
 
-    private Thread mWriterThread;
-    private ByteQueue mWriteQueue;
+    private final Thread mWriterThread;
+    private final ByteQueue mWriteQueue;
     private Handler mWriterHandler;
 
-    private CharBuffer mWriteCharBuffer;
-    private ByteBuffer mWriteByteBuffer;
-    private CharsetEncoder mUTF8Encoder;
+    private final CharBuffer mWriteCharBuffer;
+    private final ByteBuffer mWriteByteBuffer;
+    private final CharsetEncoder mUTF8Encoder;
 
     // Number of rows in the transcript
     private static final int TRANSCRIPT_ROWS = 10000;
@@ -111,7 +112,7 @@ public class TermSession {
     private FinishCallback mFinishCallback;
 
     private boolean mIsRunning = false;
-    private Handler mMsgHandler = new Handler() {
+    private final Handler mMsgHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (!mIsRunning) {
@@ -146,7 +147,7 @@ public class TermSession {
         mReceiveBuffer = new byte[4 * 1024];
         mByteQueue = new ByteQueue(4 * 1024);
         mReaderThread = new Thread() {
-            private byte[] mBuffer = new byte[4096];
+            private final byte[] mBuffer = new byte[4096];
 
             @Override
             public void run() {
@@ -167,8 +168,8 @@ public class TermSession {
                                     mMsgHandler.obtainMessage(NEW_INPUT));
                         }
                     }
-                } catch (IOException e) {
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
                 }
 
                 if (exitOnEOF) mMsgHandler.sendMessage(mMsgHandler.obtainMessage(EOF));
@@ -178,12 +179,13 @@ public class TermSession {
 
         mWriteQueue = new ByteQueue(4096);
         mWriterThread = new Thread() {
-            private byte[] mBuffer = new byte[4096];
+            private final byte[] mBuffer = new byte[4096];
 
             @Override
             public void run() {
                 Looper.prepare();
 
+                Log.d("TermSession.java: ", "new Handler");
                 mWriterHandler = new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
@@ -196,6 +198,7 @@ public class TermSession {
                 };
 
                 // Drain anything in the queue from before we started
+                Log.d("TermSession.java: ", "writeToOutput()");
                 writeToOutput();
 
                 Looper.loop();
@@ -217,12 +220,10 @@ public class TermSession {
                     writeQueue.read(buffer, 0, bytesToWrite);
                     termOut.write(buffer, 0, bytesToWrite);
                     termOut.flush();
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     // Ignore exception
                     // We don't really care if the receiver isn't listening.
                     // We just make a best effort to answer the query.
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -275,7 +276,7 @@ public class TermSession {
                 count -= written;
                 notifyNewOutput();
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -294,7 +295,7 @@ public class TermSession {
         try {
             byte[] bytes = data.getBytes("UTF-8");
             write(bytes, 0, bytes.length);
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException ignored) {
         }
     }
 
@@ -343,30 +344,12 @@ public class TermSession {
     }
 
     /**
-     * Get the {@link OutputStream} associated with this session.
-     *
-     * @return This session's {@link OutputStream}.
-     */
-    public OutputStream getTermOut() {
-        return mTermOut;
-    }
-
-    /**
      * Set the {@link OutputStream} associated with this session.
      *
      * @param termOut This session's {@link OutputStream}.
      */
     public void setTermOut(OutputStream termOut) {
         mTermOut = termOut;
-    }
-
-    /**
-     * Get the {@link InputStream} associated with this session.
-     *
-     * @return This session's {@link InputStream}.
-     */
-    public InputStream getTermIn() {
-        return mTermIn;
     }
 
     /**
@@ -383,10 +366,6 @@ public class TermSession {
      */
     public boolean isRunning() {
         return mIsRunning;
-    }
-
-    TranscriptScreen getTranscriptScreen() {
-        return mTranscriptScreen;
     }
 
     TerminalEmulator getEmulator() {
@@ -442,7 +421,7 @@ public class TermSession {
      * Notify the UpdateCallback registered for title changes, if any, that the
      * terminal session's title has changed.
      */
-    protected void notifyTitleChanged() {
+    private void notifyTitleChanged() {
         UpdateCallback listener = mTitleChangedListener;
         if (listener != null) {
             listener.onUpdate();
@@ -486,7 +465,7 @@ public class TermSession {
     private void readFromProcess() {
         int bytesAvailable = mByteQueue.getBytesAvailable();
         int bytesToRead = Math.min(bytesAvailable, mReceiveBuffer.length);
-        int bytesRead = 0;
+        int bytesRead;
         try {
             bytesRead = mByteQueue.read(mReceiveBuffer, 0, bytesToRead);
         } catch (InterruptedException e) {
@@ -626,9 +605,8 @@ public class TermSession {
         try {
             mTermIn.close();
             mTermOut.close();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             // We don't care if this fails
-        } catch (NullPointerException e) {
         }
 
         if (mFinishCallback != null) {

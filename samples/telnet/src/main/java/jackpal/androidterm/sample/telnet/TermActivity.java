@@ -79,7 +79,7 @@ public class TermActivity extends Activity
                 if (mSession == null) {
                     return;
                 }
-                Editable e = (Editable) mEntry.getText();
+                Editable e = mEntry.getText();
                 session.write(e.toString());
                 TextKeyListener.clear(e);
             }

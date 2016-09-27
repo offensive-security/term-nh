@@ -34,7 +34,6 @@ public class      FSNavigator
   private int                            theme=                       android.R.style.Theme;
   private SharedPreferences              SP;
   private File                           cd;
-  private File                           extSdCardFile;
   private String                         extSdCard;
   private HashMap<Integer, LinearLayout> cachedFileView;
   private HashMap<Integer, LinearLayout> cachedDirectoryView;
@@ -57,7 +56,7 @@ public class      FSNavigator
     getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     Intent intent= getIntent();
-    extSdCardFile=Environment.getExternalStorageDirectory();
+    File extSdCardFile = Environment.getExternalStorageDirectory();
     extSdCard=getCanonicalPath(extSdCardFile);
     Uri    uri=intent.getData();
     String path=uri==null?null:uri.getPath();
@@ -380,7 +379,7 @@ public class      FSNavigator
                  tv.setText(up  ? "["+cd.getPath()+"]"
                                 : name
                  );
-    ((ImageView)ll.findViewById(R.id.imageview)).setTag(name);
+    ll.findViewById(R.id.imageview).setTag(name);
     return(ll);
   }
   ////////////////////////////////////////////////////////////

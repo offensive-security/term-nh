@@ -23,7 +23,7 @@ public class AndroidCompat {
         V11ToV20 = (SDK >= 11) && (SDK <= 20);
     }
 
-    private final static int getSDK() {
+    private static int getSDK() {
         int result;
         try {
             result = AndroidLevel4PlusCompat.getSDKInt();
