@@ -17,6 +17,8 @@
 package com.offsec.nhterm;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.offsec.nhterm.R;
@@ -40,6 +42,7 @@ import java.text.Collator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import android.view.View.OnClickListener;
 import android.app.Activity;
@@ -842,6 +845,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 })
                 .setPositiveButton("AndroidSu",
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.KITKAT)
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("Su", "Su");
                                 TermSession session = null;
@@ -852,10 +856,10 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                     e.printStackTrace();
                                 }
                                 mTermSessions.add(session);
-                                if(from == "doCreateNewWindow"){
+                                if(Objects.equals(from, "doCreateNewWindow")){
                                     end_doCreateNewWindow(session);
                                 }
-                                if(from == "populateViewFlipper"){
+                                if(Objects.equals(from, "populateViewFlipper")){
                                     end_populateViewFlipper();
                                 };
                             }
@@ -869,7 +873,6 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                 String chroot_dir = "/data/local/nhsystem/kali-armhf"; // Not sure if I can wildcard this
 
                                 File filePath = new File(filename);
-                                //File chrootPath = new File(chroot_dir);
 
                                 try {
                                     if(!isSymlink(filePath)){
@@ -913,17 +916,14 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     // Check for symlink for bootkali
     // http://stackoverflow.com/questions/813710/java-1-6-determine-symbolic-links/813730#813730
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static boolean isSymlink(File file) throws IOException {
-        if (file == null)
-            throw new NullPointerException("File must not be null");
-        File canon;
-        if (file.getParent() == null) {
-            canon = file;
-        } else {
-            File canonDir = file.getParentFile().getCanonicalFile();
-            canon = new File(canonDir, file.getName());
-        }
-        return !canon.getCanonicalFile().equals(canon.getAbsoluteFile());
+        Log.d("SYMLINK FILE TO CHECK: ", String.valueOf(file));
+        Log.d("SYMLINK REAL PATH: ", String.valueOf(file.getCanonicalFile()));
+
+        String Bootkali = String.valueOf(file.getCanonicalFile());
+
+        return Objects.equals(Bootkali, "/data/data/com.offsec.nethunter/files/scripts/bootkali_login");
     }
 
     public boolean dir_exists(String dir_path)
@@ -935,13 +935,14 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         return ret;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void NotFound(String text){
 
         String msg = "";
 
-        if (text == "/system/bin/bootkali_login"){
+        if (Objects.equals(text, "/system/bin/bootkali_login")){
             msg = "Please run Nethunter Application to generate!";
-        } else if (text == "/data/local/nhsystem/kali-armhf" ){
+        } else if (Objects.equals(text, "/data/local/nhsystem/kali-armhf")){
             msg = "Missing chroot.  You need to install from Chroot Manager";
         }
         /// Do something for not found text (alertDialog)
