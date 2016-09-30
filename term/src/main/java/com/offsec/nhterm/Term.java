@@ -200,7 +200,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             Log.d("mPendingPathBroadcasts","Tamano = " + mTermService.getSessions().size());
             Log.d("mPendingPathBroadcasts","Tamano = " + oldLength);
             TextView label = new TextView(Term.this);
-            String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
+            @SuppressLint("StringFormatInvalid") String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
             label.setText(title);
             if (AndroidCompat.SDK >= 13) {
                 label.setTextAppearance(Term.this, TextAppearance_Holo_Widget_ActionBar_Title);
@@ -811,6 +811,24 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void show_nosupersu(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("No SU binary found!  Missing root!");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
     private void show_shell_dialog(final String from){
         Log.d("doCreateWin", "creating");
         final TermSettings settings = mSettings;
@@ -849,25 +867,37 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("Su", "Su");
                                 TermSession session = null;
+
+                                if(CheckRoot.isDeviceRooted()){
+                                    Log.d("isDeviceRooted","Device is rooted!");
                                 try {
                                     session = createTermSession(getBaseContext(), settings, "", ShellType.ANDROID_SU_SHELL);
                                     session.setFinishCallback(mTermService);
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }
+                                    }
                                 mTermSessions.add(session);
                                 if(Objects.equals(from, "doCreateNewWindow")){
                                     end_doCreateNewWindow(session);
-                                }
+                                    }
                                 if(Objects.equals(from, "populateViewFlipper")){
                                     end_populateViewFlipper();
-                                };
+                                    }
+
+                                } else {
+                                // ALERT! WHY YOU NO ROOT!
+                                    Log.d("isDeviceRooted","Device is not rooted!");
+                                    show_nosupersu();
+                                }
                             }
                         })
                 .setNeutralButton("Kali",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("Kali", "Kali");
+
+                                if(CheckRoot.isDeviceRooted()){
+                                    Log.d("isDeviceRooted","Device is rooted!");
 
                                 String filename = "/system/bin/bootkali_login";
                                 String chroot_dir = "/data/local/nhsystem/kali-armhf"; // Not sure if I can wildcard this
@@ -897,6 +927,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                }
+                                } else {
+                                    // ALERT! WHY YOU NO ROOT!
+                                    Log.d("isDeviceRooted","Device is not rooted!");
+                                    show_nosupersu();
                                 }
                             }
                         });
