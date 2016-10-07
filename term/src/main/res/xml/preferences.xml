@@ -96,7 +96,7 @@
                 android:title="Ctrl"/>
             <CheckBoxPreference
                 android:key="functionbar_alt"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="Alt"/>
             <CheckBoxPreference
                 android:key="functionbar_tab"
@@ -112,19 +112,19 @@
                 android:title="▼"/>
             <CheckBoxPreference
                 android:key="functionbar_left"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="◀"/>
             <CheckBoxPreference
                 android:key="functionbar_right"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="▶"/>
             <CheckBoxPreference
                 android:key="functionbar_backspace"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="BS"/>
             <CheckBoxPreference
                 android:key="functionbar_enter"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="ENTER"/>
             <CheckBoxPreference
                 android:key="functionbar_i"
@@ -136,7 +136,7 @@
                 android:title=":"/>
             <CheckBoxPreference
                 android:key="functionbar_slash"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="/"/>
             <CheckBoxPreference
                 android:key="functionbar_minus"
@@ -148,11 +148,11 @@
                 android:title="="/>
             <CheckBoxPreference
                 android:key="functionbar_asterisk"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="*"/>
             <CheckBoxPreference
                 android:key="functionbar_pipe"
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:title="|"/>
             <CheckBoxPreference
                 android:key="functionbar_vim_paste"
