@@ -1426,7 +1426,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         setFunctionBarButton(R.id.button_esc, visibility);
         visibility = mPrefs.getBoolean("functionbar_ctrl", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_ctrl, visibility);
-        visibility = mPrefs.getBoolean("functionbar_alt", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_alt", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_alt, visibility);
         visibility = mPrefs.getBoolean("functionbar_tab", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_tab, visibility);
@@ -1435,27 +1435,27 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         setFunctionBarButton(R.id.button_up, visibility);
         visibility = mPrefs.getBoolean("functionbar_down", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_down, visibility);
-        visibility = mPrefs.getBoolean("functionbar_left", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_left", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_left, visibility);
-        visibility = mPrefs.getBoolean("functionbar_right", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_right", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_right, visibility);
 
-        visibility = mPrefs.getBoolean("functionbar_backspace", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_backspace", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_backspace, visibility);
-        visibility = mPrefs.getBoolean("functionbar_enter", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_enter", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_enter, visibility);
 
         visibility = mPrefs.getBoolean("functionbar_i", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_i, visibility);
         visibility = mPrefs.getBoolean("functionbar_colon", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_colon, visibility);
-        visibility = mPrefs.getBoolean("functionbar_slash", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_slash", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_slash, visibility);
         visibility = mPrefs.getBoolean("functionbar_equal", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_equal, visibility);
-        visibility = mPrefs.getBoolean("functionbar_asterisk", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_asterisk", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_asterisk, visibility);
-        visibility = mPrefs.getBoolean("functionbar_pipe", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_pipe", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_pipe, visibility);
         visibility = mPrefs.getBoolean("functionbar_minus", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_minus, visibility);
