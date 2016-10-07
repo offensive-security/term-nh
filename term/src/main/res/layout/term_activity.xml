@@ -63,7 +63,8 @@ android:orientation="vertical" >
                 android:layout_height="wrap_content"
                 android:minHeight="35sp"
                 android:minWidth="60sp"
-                android:text="&quot;*p"/>
+                android:gravity="center"
+                android:drawableLeft="@drawable/ic_content_paste_white_24dp"/>
             <Button
                 android:id="@+id/button_slash"
                 android:layout_width="wrap_content"
