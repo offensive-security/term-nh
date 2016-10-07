@@ -1440,7 +1440,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         visibility = mPrefs.getBoolean("functionbar_right", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_right, visibility);
 
-        visibility = mPrefs.getBoolean("functionbar_backspace", true) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_backspace", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_backspace, visibility);
         visibility = mPrefs.getBoolean("functionbar_enter", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_enter, visibility);
@@ -1453,13 +1453,13 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         setFunctionBarButton(R.id.button_slash, visibility);
         visibility = mPrefs.getBoolean("functionbar_equal", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_equal, visibility);
-        visibility = mPrefs.getBoolean("functionbar_asterisk", true) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_asterisk", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_asterisk, visibility);
         visibility = mPrefs.getBoolean("functionbar_pipe", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_pipe, visibility);
-        visibility = mPrefs.getBoolean("functionbar_minus", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_minus", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_minus, visibility);
-        visibility = mPrefs.getBoolean("functionbar_vim_paste", false) ? View.VISIBLE : View.GONE;
+        visibility = mPrefs.getBoolean("functionbar_vim_paste", true) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_vim_paste, visibility);
         visibility = mPrefs.getBoolean("functionbar_vim_yank", false) ? View.VISIBLE : View.GONE;
         setFunctionBarButton(R.id.button_vim_yank, visibility);
@@ -1557,7 +1557,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 sendKeyStrings("-", false);
                 break;
             case R.id.button_vim_paste:
-                sendKeyStrings("\"*p", false);
+                doPaste();
+                //sendKeyStrings("\"*p", false);
                 break;
             case R.id.button_vim_yank:
                 sendKeyStrings("\"*yy", false);
