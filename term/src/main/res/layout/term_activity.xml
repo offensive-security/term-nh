@@ -54,44 +54,58 @@ android:orientation="vertical" >
                 android:id="@+id/button_esc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="Esc"/>
             <Button
-                android:id="@+id/button_backspace"
+                android:id="@+id/button_vim_paste"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
-                android:text="BS"/>
+                android:text="&quot;*p"/>
             <Button
                 android:id="@+id/button_slash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="/"/>
             <Button
                 android:id="@+id/button_pipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="|"/>
             <Button
                 android:id="@+id/button_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="▲"/>
+            <Button
+                android:id="@+id/button_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="35sp"
+                android:minWidth="60sp"
+                android:text="-"/>
             <Button
                 android:id="@+id/button_asterisk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="*"/>
+            <Button
+                android:id="@+id/button_backspace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="35sp"
+                android:minWidth="60sp"
+                android:text="BS"/>
         </TableRow>
 
             <!-- ROW 2 -->
@@ -103,21 +117,21 @@ android:orientation="vertical" >
                 android:id="@+id/button_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="Tab"/>
             <Button
                 android:id="@+id/button_ctrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="Ctrl"/>
             <Button
                 android:id="@+id/button_alt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="Alt"/>
 
@@ -125,126 +139,112 @@ android:orientation="vertical" >
                 android:id="@+id/button_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="◀"/>
             <Button
                 android:id="@+id/button_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="▼"/>
             <Button
                 android:id="@+id/button_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="▶"/>
             <Button
                 android:id="@+id/button_enter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="⏎"/>
             <Button
                 android:id="@+id/button_i"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="i"/>
             <Button
                 android:id="@+id/button_colon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text=":"/>
-            <Button
-                android:id="@+id/button_minus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="45sp"
-                android:minWidth="60sp"
-                android:text="-"/>
             <Button
                 android:id="@+id/button_equal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="="/>
-            <Button
-                android:id="@+id/button_vim_paste"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="45sp"
-                android:minWidth="60sp"
-                android:text="&quot;*p"/>
             <Button
                 android:id="@+id/button_vim_yank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="&quot;*yy"/>
             <Button
                 android:id="@+id/button_menu_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="[＋]"/>
             <Button
                 android:id="@+id/button_menu_minus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="[－]"/>
             <Button
                 android:id="@+id/button_menu_x"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="[×]"/>
             <Button
                 android:id="@+id/button_menu_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="[？]"/>
             <Button
                 android:id="@+id/button_menu_quit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="[Q]"/>
             <Button
                 android:id="@+id/button_softkeyboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="◇"/>
             <Button
                 android:id="@+id/button_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="≡"/>
             <Button
                 android:id="@+id/button_menu_hide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="45sp"
+                android:minHeight="35sp"
                 android:minWidth="60sp"
                 android:text="∇"/>
         </TableRow>
