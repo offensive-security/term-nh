@@ -43,6 +43,7 @@
     <application android:icon="@mipmap/ic_launcher"
         android:label="@string/application_terminal"
         android:hardwareAccelerated="true"
+        android:allowBackup="false"
         android:theme="@style/Theme">
         <activity android:name="com.offsec.nhterm.Term"
             android:launchMode="singleTask"

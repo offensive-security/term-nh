@@ -30,18 +30,18 @@ public class TextIcon
     for(int i=0; i<nLines; ++i)
     {
             p.       getTextBounds(lines[i], 0, lines[i].length(), R);
-      float h=       Float.valueOf(Math.abs(R.top-R.bottom));
-      float w=       Float.valueOf(Math.abs(R.right-R.left));
+      float h= (float) Math.abs(R.top - R.bottom);
+      float w= (float) Math.abs(R.right - R.left);
       if(nLines>1)   h+=0.1f*h; // Add space between lines.
       HH[i]=         h;
       H+=            h;
       if(w>W)        W=w;
     }
     float   f=       ((float)width)*H/((float)height);
-    int     hBitmap= (int)H;
-    int     wBitmap= (int)W;
-    if(W<f) {wBitmap=(int)FloatMath.ceil(f); hBitmap=(int)FloatMath.ceil(H);}
-    else    {wBitmap=(int)FloatMath.ceil(W); hBitmap=(int)FloatMath.ceil(height*wBitmap/width);}
+    int     hBitmap;
+    int     wBitmap;
+    if(W<f) {wBitmap=(int) Math.ceil(f); hBitmap=(int) Math.ceil(H);}
+    else    {wBitmap=(int) Math.ceil(W); hBitmap=(int) Math.ceil(height*wBitmap/width);}
 
     Bitmap  b=       Bitmap.createBitmap(wBitmap, hBitmap, Config.ARGB_8888);
             b.       setDensity(Bitmap.DENSITY_NONE);

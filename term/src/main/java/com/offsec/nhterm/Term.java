@@ -19,6 +19,7 @@ package com.offsec.nhterm;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
 import com.offsec.nhterm.R;
@@ -190,7 +191,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         // From android.R.style in API 13
         private static final int TextAppearance_Holo_Widget_ActionBar_Title = 0x01030112;
 
-        public WindowListActionBarAdapter(SessionList sessions) {
+        WindowListActionBarAdapter(SessionList sessions) {
             super(sessions);
         }
 
@@ -951,7 +952,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     // Check for symlink for bootkali
     // http://stackoverflow.com/questions/813710/java-1-6-determine-symbolic-links/813730#813730
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static boolean isSymlink(File file) throws IOException {
         Log.d("SYMLINK FILE TO CHECK: ", String.valueOf(file));
         Log.d("SYMLINK REAL PATH: ", String.valueOf(file.getCanonicalFile()));

@@ -66,9 +66,9 @@ public class      FSNavigator
     titleView=           directoryEntry("..");
     pathEntryView=       fileEntry(null);
     contentView=         makeContentView();
-    cachedDirectoryView= new HashMap<Integer, LinearLayout>();
-    cachedFileView=      new HashMap<Integer, LinearLayout>();
-    cachedDividerView=   new HashMap<Integer, TextView>();
+    cachedDirectoryView= new HashMap<>();
+    cachedFileView= new HashMap<>();
+    cachedDividerView= new HashMap<>();
   }
   ////////////////////////////////////////////////////////////
   public void onPause()
@@ -79,7 +79,7 @@ public class      FSNavigator
   ////////////////////////////////////////////////////////////
   private void doPause()
   {
-    SP.edit().putString("lastDirectory", getCanonicalPath(cd)).commit();
+    SP.edit().putString("lastDirectory", getCanonicalPath(cd)).apply();
   }
   ////////////////////////////////////////////////////////////
   public void onResume()
@@ -101,7 +101,7 @@ public class      FSNavigator
       case android.R.style.Theme_Light: theme=android.R.style.Theme;       break;
       default: return;
     }
-    SP.edit().putInt("theme", theme).commit();
+    SP.edit().putInt("theme", theme).apply();
     startActivityForResult(getIntent().addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT), -1);
     finish();
   }
@@ -460,10 +460,9 @@ public class      FSNavigator
     if(zd!=null)
     {
       java.util.Arrays.sort(zd, 0, zd.length, stringSortComparator);
-      for(int i=0, n=zd.length; i<n; i++)
-      {
-        if(zd[i].equals("."))  continue;
-        ll.addView(directoryEntry(zd[i]));
+      for (String aZd : zd) {
+        if (aZd.equals(".")) continue;
+        ll.addView(directoryEntry(aZd));
         ll.addView(entryDividerH());
       }
     }
@@ -471,9 +470,8 @@ public class      FSNavigator
     if(zf!=null)
     {
       java.util.Arrays.sort(zf, 0, zf.length, stringSortComparator);
-      for(int i=0, n=zf.length; i<n; i++)
-      {
-        ll.addView(fileEntry(zf[i]));
+      for (String aZf : zf) {
+        ll.addView(fileEntry(aZf));
         ll.addView(entryDividerH());
       }
     }

@@ -30,8 +30,8 @@ import com.offsec.nhterm.emulatorview.UpdateCallback;
 @SuppressWarnings("serial")
 public class SessionList extends ArrayList<TermSession>
 {
-    LinkedList<UpdateCallback> callbacks = new LinkedList<UpdateCallback>();
-    LinkedList<UpdateCallback> titleChangedListeners = new LinkedList<UpdateCallback>();
+    LinkedList<UpdateCallback> callbacks = new LinkedList<>();
+    LinkedList<UpdateCallback> titleChangedListeners = new LinkedList<>();
     UpdateCallback mTitleChangedListener = new UpdateCallback() {
         public void onUpdate() {
             notifyTitleChanged();

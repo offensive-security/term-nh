@@ -94,7 +94,7 @@ public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
 
     private void commonConstructor(Context context) {
         this.context = context;
-        callbacks = new LinkedList<UpdateCallback>();
+        callbacks = new LinkedList<>();
 
         updateVisibleRect();
         Rect visible = mVisibleRect;
@@ -325,7 +325,7 @@ public class TermViewFlipper extends ViewFlipper implements Iterable<View> {
         SharedPreferences pref = context.getSharedPreferences("dev", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
         return value;
     }
 

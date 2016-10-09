@@ -21,7 +21,6 @@
     android:layout_height="fill_parent"
     android:padding="15dp"
     android:maxLines="1"
-    android:singleLine="true"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:text="@string/new_window"
 />

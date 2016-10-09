@@ -183,7 +183,7 @@ public class      ColorValue
     int  view=(Integer)buttonView.getTag();
     locks[view]=isChecked;
     barLock=false;
-    for(int i=0; i<locks.length; i++)  if(locks[i])  barLock=true;
+    for (boolean lock : locks) if (lock) barLock = true;
   }
   ////////////////////////////////////////////////////////////
   private void buttonHit(int hit, int color)

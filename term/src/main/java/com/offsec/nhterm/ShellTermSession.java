@@ -168,7 +168,7 @@ public class ShellTermSession extends GenericTermSession {
         final int WHITESPACE = 1;
         final int INQUOTE = 2;
         int state = WHITESPACE;
-        ArrayList<String> result =  new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         int cmdLen = cmd.length();
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < cmdLen; i++) {

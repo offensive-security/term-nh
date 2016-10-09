@@ -377,8 +377,7 @@ public class TermSettings {
     }
 
     public boolean backKeySendsCharacter() {
-        if (mBackKeyAction == BACK_KEY_TOGGLE_IME) return false;
-        return mBackKeyAction >= BACK_KEY_SENDS_ESC;
+        return mBackKeyAction != BACK_KEY_TOGGLE_IME && mBackKeyAction >= BACK_KEY_SENDS_ESC;
     }
 
     public boolean getAltSendsEscFlag() {

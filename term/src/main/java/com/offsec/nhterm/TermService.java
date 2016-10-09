@@ -16,7 +16,9 @@
 
 package com.offsec.nhterm;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -26,10 +28,13 @@ import android.net.Uri;
 import android.os.*;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.app.Notification;
+import android.support.v4.app.NotificationCompat;
 import android.app.PendingIntent;
+
 
 import com.offsec.nhterm.R;
 import com.offsec.nhterm.emulatorview.TermSession;
@@ -45,6 +50,9 @@ public class TermService extends Service implements TermSession.FinishCallback
 {
     /* Parallels the value of START_STICKY on API Level >= 5 */
     private static final int COMPAT_START_STICKY = 1;
+
+    private NotificationManager mNotificationManager;
+    private final int notifyID = 1;
 
     private static final int RUNNING_NOTIFICATION = 1;
     private ServiceForegroundCompat compat;
@@ -65,7 +73,7 @@ public class TermService extends Service implements TermSession.FinishCallback
 
     /* This should be @Override if building with API Level >=5 */
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return COMPAT_START_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override
@@ -89,27 +97,53 @@ public class TermService extends Service implements TermSession.FinishCallback
         String defValue = getDir("HOME", MODE_PRIVATE).getAbsolutePath();
         String homePath = prefs.getString("home_path", defValue);
         editor.putString("home_path", homePath);
-        editor.commit();
+        editor.apply();
 
-        compat = new ServiceForegroundCompat(this);
+        //compat = new ServiceForegroundCompat(this);
         mTermSessions = new SessionList();
 
-        /* Put the service in the foreground. */
-        Notification notification = new Notification(R.drawable.ic_stat_service_notification_icon, getText(R.string.service_notify_text), System.currentTimeMillis());
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        Intent notifyIntent = new Intent(this, Term.class);
-        notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
-        notification.setLatestEventInfo(this, getText(R.string.application_terminal), getText(R.string.service_notify_text), pendingIntent);
-        compat.startForeground(RUNNING_NOTIFICATION, notification);
+        mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
+        // Building the notification
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_service_notification_icon) // notification icon
+                .setContentTitle(getText(R.string.application_terminal)) // main title of the notification
+                .setContentText(getText(R.string.service_notify_text)); // notification text
+                //.setContentIntent(pendingIntent); // notification intent
+
+        Intent notifyIntent = new Intent(this, Term.class);
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(Term.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(notifyIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(notifyID, mBuilder.build());
+
+        //compat.startForeground(RUNNING_NOTIFICATION, notification);
         Log.d(TermDebug.LOG_TAG, "TermService started");
-        return;
     }
 
     @Override
     public void onDestroy() {
-        compat.stopForeground(true);
+        // Remove notification
+        mNotificationManager.cancel(notifyID);
+
         for (TermSession session : mTermSessions) {
             /* Don't automatically remove from list of sessions -- we clear the
              * list below anyway and we could trigger
@@ -118,7 +152,6 @@ public class TermService extends Service implements TermSession.FinishCallback
             session.finish();
         }
         mTermSessions.clear();
-        return;
     }
 
     public SessionList getSessions() {

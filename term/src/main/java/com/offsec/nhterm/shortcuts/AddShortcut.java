@@ -243,7 +243,7 @@ public class      AddShortcut
       if(path!=null      && !path.equals(""))      cmd.append(RemoteInterface.quoteForBash(path));
       if(arguments!=null && !arguments.equals("")) cmd.append(" ").append(arguments);
       String cmdStr=cmd.toString();
-      String cmdEnc=null;
+      String cmdEnc;
       try
       {
         cmdEnc=ShortcutEncryption.encrypt(cmdStr, keys);
@@ -291,14 +291,14 @@ public class      AddShortcut
   protected void onActivityResult(int requestCode, int resultCode, Intent data)
   {
     super.onActivityResult(requestCode, resultCode, data);
-    Uri    uri=  null;
+    Uri    uri;
     path= null;
     switch(requestCode)
     {
       case OP_MAKE_SHORTCUT:
         if(data!=null && (uri=data.getData())!=null && (path=uri.getPath())!=null)
         {
-          SP.edit().putString("lastPath", path).commit();
+          SP.edit().putString("lastPath", path).apply();
           et[PATH].setText(path);
           name=path.replaceAll(".*/", "");
           if(et[NAME].getText().toString().equals("")) et[NAME].setText(name);
