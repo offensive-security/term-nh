@@ -906,24 +906,26 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                 File filePath = new File(filename);
 
                                 try {
-                                    if(!isSymlink(filePath)){
-                                        NotFound(filename);
-                                    } else if (!dir_exists(chroot_dir)){
-                                        NotFound(chroot_dir);
-                                    } else {
-                                        TermSession session = null;
-                                        try {
-                                            session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
-                                            session.setFinishCallback(mTermService);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        mTermSessions.add(session);
-                                        if (from.equals("doCreateNewWindow")) {
-                                            end_doCreateNewWindow(session);
-                                        }
-                                        if (from.equals("populateViewFlipper")) {
-                                            end_populateViewFlipper();
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                        if(!isSymlink(filePath)){
+                                            NotFound(filename);
+                                        } else if (!dir_exists(chroot_dir)){
+                                            NotFound(chroot_dir);
+                                        } else {
+                                            TermSession session = null;
+                                            try {
+                                                session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
+                                                session.setFinishCallback(mTermService);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            mTermSessions.add(session);
+                                            if (from.equals("doCreateNewWindow")) {
+                                                end_doCreateNewWindow(session);
+                                            }
+                                            if (from.equals("populateViewFlipper")) {
+                                                end_populateViewFlipper();
+                                            }
                                         }
                                     }
                                 } catch (IOException e) {
