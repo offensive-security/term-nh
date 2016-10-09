@@ -603,7 +603,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
 
 
-        Log.d("createTermSession ", _mShell + " cmd: " + initialCommand);
+        Log.d("MM createTermSession", _mShell + "cmd: " + initialCommand);
         GenericTermSession session = new ShellTermSession(settings, initialCommand, _mShell);  // called from intents
         // XXX We should really be able to fetch this from within TermSession
 
@@ -615,7 +615,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private TermSession createTermSession() throws IOException {
         Log.d("MM createTermSession", "inthreow");
         TermSettings settings = mSettings;
-        TermSession session = createTermSession(this, settings, "", settings.getInitialCommand());
+        TermSession session = createTermSession(this, settings, "", "/system/bin/sh -");
         session.setFinishCallback(mTermService);
         return session;
     }
@@ -847,7 +847,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                         Log.d("CANCELED", "CANCELED");
                         TermSession session = null;
                         try {
-                            session = createTermSession(getBaseContext(), settings, settings.getInitialCommand(), ShellType.ANDROID_SHELL);
+                            session = createTermSession(getBaseContext(), settings, "", ShellType.ANDROID_SHELL);
                             session.setFinishCallback(mTermService);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -872,7 +872,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                 if(CheckRoot.isDeviceRooted()){
                                     Log.d("isDeviceRooted","Device is rooted!");
                                 try {
-                                    session = createTermSession(getBaseContext(), settings, settings.getInitialCommand(), ShellType.ANDROID_SU_SHELL);
+                                    session = createTermSession(getBaseContext(), settings, "", ShellType.ANDROID_SU_SHELL);
                                     session.setFinishCallback(mTermService);
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -913,7 +913,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                                     } else {
                                         TermSession session = null;
                                         try {
-                                            session = createTermSession(getBaseContext(), settings, settings.getInitialCommand(), ShellType.KALI_LOGIN_SHELL);
+                                            session = createTermSession(getBaseContext(), settings, "", ShellType.KALI_LOGIN_SHELL);
                                             session.setFinishCallback(mTermService);
                                         } catch (IOException e) {
                                             e.printStackTrace();
