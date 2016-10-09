@@ -246,7 +246,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
      *
      * A hash table of underlying URLs to implement clickable links.
      */
-    private Hashtable<Integer,URLSpan[]> mLinkLayer = new Hashtable<Integer,URLSpan[]>();
+    private Hashtable<Integer,URLSpan[]> mLinkLayer = new Hashtable<>();
 
     /**
      * Accept links that start with http[s]:
@@ -284,7 +284,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
      */
     private int createLinks(int row)
     {
-        if (mCreateURL == false) return 1;
+        if (!mCreateURL) return 1;
         TranscriptScreen transcriptScreen = mEmulator.getScreen();
         char [] line = transcriptScreen.getScriptLine(row);
         int lineCount = 1;
@@ -361,9 +361,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             }
 
             //For each URL:
-            for(int urlNum=0; urlNum<urls.length; ++urlNum)
-            {
-                URLSpan url = urls[urlNum];
+            for (URLSpan url : urls) {
                 int spanStart = textToLinkify.getSpanStart(url);
                 int spanEnd = textToLinkify.getSpanEnd(url);
 
@@ -379,8 +377,8 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                     // Basic line -- can assume one char per column
                     startRow = spanStart / mColumns;
                     startCol = spanStart % mColumns;
-                    endRow   = spanLastPos / mColumns;
-                    endCol   = spanLastPos % mColumns;
+                    endRow = spanLastPos / mColumns;
+                    endCol = spanLastPos % mColumns;
                 } else {
                     /* Iterate over the line to get starting and ending columns
                      * for this span */
@@ -418,9 +416,8 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                 }
 
                 //Fill linkRows with the URL where appropriate
-                for(int i=startRow; i <= endRow; ++i)
-                {
-                    int runStart = (i == startRow) ? startCol: 0;
+                for (int i = startRow; i <= endRow; ++i) {
+                    int runStart = (i == startRow) ? startCol : 0;
                     int runEnd = (i == endRow) ? endCol : mColumns - 1;
 
                     Arrays.fill(linkRows[i], runStart, runEnd + 1, url);
@@ -474,7 +471,8 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                 post(this);
             }
         }
-    };
+    }
+
     private MouseTrackingFlingRunner mMouseTrackingFlingRunner = new MouseTrackingFlingRunner();
 
     private float mScrollRemainder;
@@ -943,7 +941,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                     mImeSpannableString = (SpannableString)text;
                 }
                 if ((mIMEInputType == IME_INPUT_TYPE_GOOGLE) && (mIme == 4)) {
-                    if (text.toString().equals("") == false) {
+                    if (!text.toString().equals("")) {
                         clearComposingText();
                         sendText(text);
                     }
@@ -1518,7 +1516,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     }
 
     private boolean IMECtrlBeginBatchEditDisable() {
-        boolean flag = mIMECtrlBeginBatchEditDisableHwKbdChk ? mHaveFullHwKeyboard : true;
+        boolean flag = !mIMECtrlBeginBatchEditDisableHwKbdChk || mHaveFullHwKeyboard;
         return flag && mIMECtrlBeginBatchEditDisable;
     }
 
@@ -1527,7 +1525,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         while (true) {
             int ctrl = mEmulator.getEscCtrlMode();
             if (ctrl == -1) return;
-            if ((mHaveFullHwKeyboard == false) && (ctrl <= 2)) {
+            if ((!mHaveFullHwKeyboard) && (ctrl <= 2)) {
                 continue;
             }
             switch (ctrl) {
@@ -1866,12 +1864,12 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         boolean metaOn = (event.getMetaState() & (KeyEvent.META_SHIFT_ON | KeyEvent.META_META_ON)) != 0;
 
         // KeyEvent.KEYCODE_ZENKAKU_HANKAKU 211
-        alt |= mAltGrave && ((keyCode == 211) || (keyCode == KeycodeConstants.KEYCODE_GRAVE)) && (altOn && !ctrlOn && !metaOn);
+        alt = mAltGrave && ((keyCode == 211) || (keyCode == KeycodeConstants.KEYCODE_GRAVE)) && (altOn && !ctrlOn && !metaOn);
         alt |= mAltEsc && keyCode == KeycodeConstants.KEYCODE_ESCAPE && (altOn && !ctrlOn && !metaOn);
-        cs |= mCtrlSpace && keyCode == KeycodeConstants.KEYCODE_SPACE && (!altOn && ctrlOn && !metaOn);
-        zh |= mZenkakuHankaku && keyCode == 211 && (!ctrlOn && !altOn && !metaOn);  // KeyEvent.KEYCODE_ZENKAKU_HANKAKU;
-        grave |= mGrave && keyCode == KeycodeConstants.KEYCODE_GRAVE && (!ctrlOn && !altOn && !metaOn);
-        sc |= mSwitchCharset && keyCode == KeycodeConstants.KEYCODE_SWITCH_CHARSET;
+        cs = mCtrlSpace && keyCode == KeycodeConstants.KEYCODE_SPACE && (!altOn && ctrlOn && !metaOn);
+        zh = mZenkakuHankaku && keyCode == 211 && (!ctrlOn && !altOn && !metaOn);  // KeyEvent.KEYCODE_ZENKAKU_HANKAKU;
+        grave = mGrave && keyCode == KeycodeConstants.KEYCODE_GRAVE && (!ctrlOn && !altOn && !metaOn);
+        sc = mSwitchCharset && keyCode == KeycodeConstants.KEYCODE_SWITCH_CHARSET;
         if (((alt || zh || sc || grave) && event.getAction() == KeyEvent.ACTION_DOWN) || (cs && event.getAction() == KeyEvent.ACTION_UP)) {
             doToggleSoftKeyboard();
             return true;

@@ -596,10 +596,6 @@ class TranscriptScreen implements Screen {
      * characters of width 1).
      */
     boolean isBasicLine(int row) {
-        if (mData != null) {
-            return mData.isBasicLine(row);
-        } else {
-            return true;
-        }
+        return mData == null || mData.isBasicLine(row);
     }
 }

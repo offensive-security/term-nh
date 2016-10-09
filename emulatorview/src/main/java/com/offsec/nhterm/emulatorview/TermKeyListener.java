@@ -636,9 +636,6 @@ class TermKeyListener {
         if (result >= KEYCODE_OFFSET) {
             handleKeyCode(result - KEYCODE_OFFSET, null, appMode);
         } else if (result >= 0) {
-            if (setHighBit) {
-                result |= 0x80;
-            }
             mTermSession.write(result);
         }
     }

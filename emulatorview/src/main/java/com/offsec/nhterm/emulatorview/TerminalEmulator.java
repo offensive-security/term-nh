@@ -683,20 +683,18 @@ class TerminalEmulator {
         process(b, true);
     }
 
-    private static Queue<Integer> mEscSeq = new LinkedList<Integer>();
+    private static Queue<Integer> mEscSeq = new LinkedList<>();
     public void setEscCtrlMode() {
         int esc = 0;
         for (int i = 0; i <= mArgIndex; i++) {
             esc = mArgs[i];
         }
         setOSCMode(esc);
-        return;
     }
 
     public void setOSCMode(int esc) {
         mEscSeq.offer(esc);
         mUTF8ModeNotify.onUpdate();
-        return;
     }
 
     public int getEscCtrlMode() {
@@ -1909,7 +1907,7 @@ class TerminalEmulator {
     }
 
     private void emit(byte b) {
-        if (mUseAlternateCharSet && b < 128) {
+        if (mUseAlternateCharSet) {
             emit((int) mSpecialGraphicsCharMap[b]);
         } else {
             emit((int) b);

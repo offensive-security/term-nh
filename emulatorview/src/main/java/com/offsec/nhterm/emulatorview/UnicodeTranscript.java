@@ -207,7 +207,6 @@ class UnicodeTranscript {
                     if (shift == 0) {
                         break;
                     } else {
-                        continue;
                     }
                 } else {
                     // Line not blank -- we keep it and everything above
@@ -353,7 +352,6 @@ class UnicodeTranscript {
         color[blankRow] = new StyleRow(style, mColumns);
         lineWrap[blankRow] = false;
 
-        return;
     }
 
     /**
@@ -396,20 +394,20 @@ class UnicodeTranscript {
                     char cHigh = 0;
                     int x = 0;
                     int columns = mColumns;
-                    for (int i = 0; i < tmp.length; ++i) {
-                        if (tmp[i] == 0 || dx + x >= columns) {
+                    for (char aTmp : tmp) {
+                        if (aTmp == 0 || dx + x >= columns) {
                             break;
                         }
-                        if (Character.isHighSurrogate(tmp[i])) {
-                            cHigh = tmp[i];
+                        if (Character.isHighSurrogate(aTmp)) {
+                            cHigh = aTmp;
                             continue;
-                        } else if (Character.isLowSurrogate(tmp[i])) {
-                            int codePoint = Character.toCodePoint(cHigh, tmp[i]);
+                        } else if (Character.isLowSurrogate(aTmp)) {
+                            int codePoint = Character.toCodePoint(cHigh, aTmp);
                             setChar(dx + x, extDstRow, codePoint);
                             x += charWidth(codePoint);
                         } else {
-                            setChar(dx + x, extDstRow, tmp[i]);
-                            x += charWidth(tmp[i]);
+                            setChar(dx + x, extDstRow, aTmp);
+                            x += charWidth(aTmp);
                         }
                     }
                 }
@@ -440,7 +438,6 @@ class UnicodeTranscript {
                         }
                         if (Character.isHighSurrogate(tmp[i])) {
                             cHigh = tmp[i];
-                            continue;
                         } else if (Character.isLowSurrogate(tmp[i])) {
                             int codePoint = Character.toCodePoint(cHigh, tmp[i]);
                             setChar(dx + x, extDstRow, codePoint);

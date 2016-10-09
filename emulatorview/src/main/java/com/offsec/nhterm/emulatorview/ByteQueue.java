@@ -109,7 +109,6 @@ class ByteQueue {
             }
             int bytesToCopy = Math.min(oneRun, length);
             System.arraycopy(buffer, offset, mBuffer, tail, bytesToCopy);
-            offset += bytesToCopy;
             mStoredBytes += bytesToCopy;
             if (wasEmpty) {
                 notify();

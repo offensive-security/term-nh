@@ -29,7 +29,7 @@ class EmulatorDebug {
     /**
      * Set to true to log IME calls.
      */
-    public static final boolean LOG_IME = DEBUG & false;
+    public static final boolean LOG_IME = false;
 
     /**
      * Set to true to log each character received from the remote process to the
@@ -41,7 +41,7 @@ class EmulatorDebug {
     /**
      * Set to true to log unknown escape sequences.
      */
-    public static final boolean LOG_UNKNOWN_ESCAPE_SEQUENCES = DEBUG & false;
+    public static final boolean LOG_UNKNOWN_ESCAPE_SEQUENCES = false;
 
     /**
      * The tag we use when logging, so that our messages can be distinguished

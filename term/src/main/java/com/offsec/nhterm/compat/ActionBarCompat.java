@@ -36,7 +36,7 @@ public abstract class ActionBarCompat {
     public static final int ID_HOME = 0x0102002c;
 
     public interface OnNavigationListener {
-        public abstract boolean onNavigationItemSelected(int position, long id);
+        boolean onNavigationItemSelected(int position, long id);
     }
 
     public static ActionBarCompat wrap(Object actionBar) {

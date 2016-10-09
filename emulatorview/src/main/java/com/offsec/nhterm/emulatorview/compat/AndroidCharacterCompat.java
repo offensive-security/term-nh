@@ -1,5 +1,7 @@
 package com.offsec.nhterm.emulatorview.compat;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.text.AndroidCharacter;
 
 /**
@@ -14,6 +16,7 @@ public class AndroidCharacterCompat {
     public static final int EAST_ASIAN_WIDTH_WIDE = 5;
 
     private static class Api8OrLater {
+        @TargetApi(Build.VERSION_CODES.FROYO)
         public static int getEastAsianWidth(char c) {
             return AndroidCharacter.getEastAsianWidth(c);
         }

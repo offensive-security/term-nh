@@ -16,6 +16,8 @@
 
 package com.offsec.nhterm.emulatorview.compat;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.KeyCharacterMap;
 
 public abstract class KeyCharacterMapCompat {
@@ -37,6 +39,7 @@ public abstract class KeyCharacterMapCompat {
         public KeyCharacterMapApi11OrLater(Object map) {
             mMap = (KeyCharacterMap) map;
         }
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public int getModifierBehaviour() {
             return mMap.getModifierBehavior();
         }
