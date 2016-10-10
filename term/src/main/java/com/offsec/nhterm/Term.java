@@ -1011,17 +1011,19 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         // Backup if above command messes up: Get symlink true value
         String Bootkali = String.valueOf(file.getCanonicalFile());
 
-        if ((Objects.equals(Bootkali, bootkali_true)) || (output.equals("True"))) {
-            return true;
-        }
-        else return false;
+        return (Objects.equals(Bootkali, bootkali_true)) || (output.equals("True"));
     }
 
     public boolean dir_exists(String dir_path)
     {
         boolean ret = false;
         File dir = new File(dir_path);
-        if(dir.exists() && dir.isDirectory())
+
+        String command = "[ -d \""+ dir_path + "\" ] && echo 'True'";
+        String output = RunAsRootOutput(command);
+        Log.d("DIRCHECK RunAsRoot ", output);
+
+        if ((dir.exists() && dir.isDirectory()) || (output.equals("True")))
             ret = true;
         return ret;
     }
