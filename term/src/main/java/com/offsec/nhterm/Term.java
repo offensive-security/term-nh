@@ -37,9 +37,15 @@ import com.offsec.nhterm.emulatorview.compat.KeycodeConstants;
 import com.offsec.nhterm.util.SessionList;
 import com.offsec.nhterm.util.TermSettings;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -952,16 +958,63 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         alertDialog.show();
     }
 
-    // Check for symlink for bootkali
+    public String RunAsRootOutput(String command) {
+        String output = "";
+        String line;
+        try {
+            Process process = Runtime.getRuntime().exec("su");
+            OutputStream stdin = process.getOutputStream();
+            InputStream stderr = process.getErrorStream();
+            InputStream stdout = process.getInputStream();
+
+            stdin.write((command + '\n').getBytes());
+            stdin.write(("exit\n").getBytes());
+            stdin.flush();
+            stdin.close();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+            while ((line = br.readLine()) != null) {
+                output = output + line;
+            }
+            br.close();
+            br = new BufferedReader(new InputStreamReader(stderr));
+            while ((line = br.readLine()) != null) {
+                Log.e("Shell Error:", line);
+            }
+            br.close();
+            process.waitFor();
+            process.destroy();
+        } catch (IOException e) {
+            Log.d("Term.java ", "An IOException was caught: " + e.getMessage());
+        } catch (InterruptedException ex) {
+            Log.d("Term.java" , "An InterruptedException was caught: " + ex.getMessage());
+        }
+        return output;
+    }
+
+        // Check for symlink for bootkali
     // http://stackoverflow.com/questions/813710/java-1-6-determine-symbolic-links/813730#813730
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static boolean isSymlink(File file) throws IOException {
+    public boolean isSymlink(File file) throws IOException {
         Log.d("SYMLINK FILE TO CHECK: ", String.valueOf(file));
         Log.d("SYMLINK REAL PATH: ", String.valueOf(file.getCanonicalFile()));
 
+        String bootkali_sys = "/system/bin/bootkali_login";
+        String bootkali_true = "/data/data/com.offsec.nethunter/files/scripts/bootkali_login";
+
+        // RunAsRootOutput: Check if /sys bootkali is symbolic and if bootkali_login exists in app folder
+        // return string 'True' if it does
+        String command = "[ -L \"" + bootkali_sys + "\" ] && [ -f \"" + bootkali_true + "\" ] && echo 'True'";
+        String output = RunAsRootOutput(command);
+        Log.d("SYMLINK RunAsRoot ", output);
+
+        // Backup if above command messes up: Get symlink true value
         String Bootkali = String.valueOf(file.getCanonicalFile());
 
-        return Objects.equals(Bootkali, "/data/data/com.offsec.nethunter/files/scripts/bootkali_login");
+        if ((Objects.equals(Bootkali, bootkali_true)) || (output.equals("True"))) {
+            return true;
+        }
+        else return false;
     }
 
     public boolean dir_exists(String dir_path)
