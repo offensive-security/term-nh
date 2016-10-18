@@ -1,5 +1,11 @@
 #NetHunter Terminal Emulator
 
+
+WE ARE WORKING HERE NOW: https://github.com/binkybear/Android-Terminal-Emulator
+##################################
+
+-- DEPRECATED --
+
 This is a new fork of the Android Terminal Emulator so we can adapt it to our neeeds for Kali Linux Nethunter.
 
 Dependencies running the terminal:
