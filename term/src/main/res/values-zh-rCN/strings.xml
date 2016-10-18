@@ -15,7 +15,7 @@
  * limitations under the License.
 -->
 <resources>
-   <string name="application_terminal">终端模拟器</string>
+   <string name="application_terminal">NetHunter终端</string>
    <string name="preferences">首选项</string>
    <string name="new_window">新窗口</string>
    <string name="close_window">关闭窗口</string>
