@@ -1,8 +1,13 @@
 #NetHunter Terminal Emulator
 
 
-WE ARE WORKING HERE NOW: https://github.com/binkybear/Android-Terminal-Emulator
-##################################
+## WE ARE WORKING HERE NOW: https://github.com/binkybear/Android-Terminal-Emulator
+
+
+
+
+
+
 
 -- DEPRECATED --
 
