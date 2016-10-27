@@ -7,7 +7,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_PACKAGE_NAME := Nethunter-Terminal-Emulator
 
 nhterm_root  := $(LOCAL_PATH)
-nhterm_dir   := app
+nhterm_dir   := term
 nhterm_out   := $(PWD)/$(OUT_DIR)/target/common/obj/APPS/$(LOCAL_MODULE)_intermediates
 nhterm_build := $(nhterm_root)/$(nhterm_dir)/build
 nhterm_apk   := build/outputs/apk/$(nhterm_dir)-release-unsigned.apk
