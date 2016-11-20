@@ -2,9 +2,9 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := Nethunter-Terminal-Emulator
+LOCAL_MODULE := Terminal
 LOCAL_MODULE_TAGS := optional
-LOCAL_PACKAGE_NAME := Nethunter-Terminal-Emulator
+LOCAL_PACKAGE_NAME := Terminal
 
 nhterm_root  := $(LOCAL_PATH)
 nhterm_dir   := term
