@@ -3,7 +3,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := Nethunter-Terminal-Emulator
-LOCAL_MODULE_TAGS := tests
+LOCAL_MODULE_TAGS := optional
 LOCAL_PACKAGE_NAME := Nethunter-Terminal-Emulator
 
 nhterm_root  := $(LOCAL_PATH)
@@ -20,9 +20,9 @@ $(nhterm_root)/$(nhterm_dir)/$(nhterm_apk):
 	cd $(nhterm_root)/$(nhterm_dir) && gradle assembleRelease
 
 LOCAL_CERTIFICATE := platform
+LOCAL_PRIVILEGED_MODULE := true
 LOCAL_SRC_FILES := $(nhterm_dir)/$(nhterm_apk)
 LOCAL_MODULE_CLASS := APPS
 LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
-LOCAL_MODULE_PATH := $(TARGET_OUT_DATA)
 
 include $(BUILD_PREBUILT)
