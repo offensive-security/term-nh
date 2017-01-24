@@ -98,7 +98,7 @@ public class ShellTermSession extends GenericTermSession {
         }
         String[] env = new String[3];
         env[0] = "TERM=" + settings.getTermType();
-        env[1] = "PATH=" + path;
+        env[1] = "PATH=" + path + ":/data/data/com.offsec.nethunter/files/scripts/";
         env[2] = "HOME=" + settings.getHomePath();
        // Log.d("Initialize Sess", settings.getShell());
         mProcId = createSubprocess(mShell, env);
