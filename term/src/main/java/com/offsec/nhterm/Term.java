@@ -1003,7 +1003,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         String msg = "";
 
-        if (Objects.equals(text, "/data/data/com.offsec.nethunter/files/scripts/bootkali")){
+        if (Objects.equals(text, "/system/bin/bootkali_login")){
             msg = "Please run Nethunter Application to generate!";
         } else if (Objects.equals(text, "/data/local/nhsystem/kali-armhf")){
             msg = "Missing chroot.  You need to install from Chroot Manager";
