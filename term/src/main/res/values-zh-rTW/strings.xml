@@ -15,7 +15,7 @@
  * limitations under the License.
 -->
 <resources>
-   <string name="application_terminal">模擬終端</string>
+   <string name="application_terminal">NetHunter命令列</string>
    <string name="preferences">設定</string>
    <string name="reset">結束</string>
    <string name="send_email">以電郵傳送</string>
