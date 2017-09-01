@@ -14,13 +14,16 @@ android {
             ldLibs 'log', 'c'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     sourceSets {
         main {
-            jni.srcDirs = []
+            jni.srcDirs = ['jni']
         }
     }
     buildTypes {
@@ -31,10 +34,15 @@ android {
     }
     productFlavors {
     }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
 }
 
 dependencies {
-    compile project(':emulatorview')
-    compile project(':libtermexec')
-    compile "com.android.support:support-v4:+"
+    implementation project(':emulatorview')
+    implementation project(':libtermexec')
+    implementation "com.android.support:support-v4:+"
 }

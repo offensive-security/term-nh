@@ -19,7 +19,7 @@ import java.util.*;
 public class TermExec {
     // Warning: bump the library revision, when an incompatible change happens
     static {
-        System.loadLibrary("jackpal-termexec2nhj1");
+        System.loadLibrary("jackpal-termexec2");
     }
 
     public static final String SERVICE_ACTION_V1 = "com.offsec.nhterm.action.START_TERM.v1";
