@@ -18,40 +18,6 @@ package com.offsec.nhterm;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.text.TextUtils;
-
-import com.offsec.nhterm.R;
-
-import com.offsec.nhterm.compat.ActionBarCompat;
-import com.offsec.nhterm.compat.ActivityCompat;
-import com.offsec.nhterm.compat.AndroidCompat;
-import com.offsec.nhterm.compat.MenuItemCompat;
-import com.offsec.nhterm.emulatorview.EmulatorView;
-import com.offsec.nhterm.emulatorview.TermSession;
-import com.offsec.nhterm.emulatorview.UpdateCallback;
-import com.offsec.nhterm.emulatorview.compat.ClipboardManagerCompat;
-import com.offsec.nhterm.emulatorview.compat.ClipboardManagerCompatFactory;
-import com.offsec.nhterm.emulatorview.compat.KeycodeConstants;
-import com.offsec.nhterm.util.SessionList;
-import com.offsec.nhterm.util.TermSettings;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-
-import android.view.View.OnClickListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -69,11 +35,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -93,7 +61,30 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static android.R.attr.button;
+import com.offsec.nhterm.compat.ActionBarCompat;
+import com.offsec.nhterm.compat.ActivityCompat;
+import com.offsec.nhterm.compat.AndroidCompat;
+import com.offsec.nhterm.compat.MenuItemCompat;
+import com.offsec.nhterm.emulatorview.EmulatorView;
+import com.offsec.nhterm.emulatorview.TermSession;
+import com.offsec.nhterm.emulatorview.UpdateCallback;
+import com.offsec.nhterm.emulatorview.compat.ClipboardManagerCompat;
+import com.offsec.nhterm.emulatorview.compat.ClipboardManagerCompatFactory;
+import com.offsec.nhterm.emulatorview.compat.KeycodeConstants;
+import com.offsec.nhterm.util.SessionList;
+import com.offsec.nhterm.util.TermSettings;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A terminal emulator activity.
@@ -421,7 +412,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TermDebug.LOG_TAG);
-        WifiManager wm = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int wifiLockMode = WifiManager.WIFI_MODE_FULL;
         if (AndroidCompat.SDK >= 12) {
             wifiLockMode = WIFI_MODE_FULL_HIGH_PERF;
