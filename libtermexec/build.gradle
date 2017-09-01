@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 apply plugin: 'com.android.library'
@@ -14,7 +14,7 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25"
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         minSdkVersion 4
@@ -23,17 +23,21 @@ android {
         versionName "2.0"
 
         ndk {
-            moduleName 'libjackpal-termexec2nhj1'
-            abiFilters 'all'
+            moduleName 'term-N'
+            abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a', 'x86'
             ldLibs 'log', 'c'
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -53,7 +57,6 @@ android.libraryVariants.all { variant ->
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    compile 'com.android.support:support-annotations:21.0.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-annotations:25.3.0'
 }
