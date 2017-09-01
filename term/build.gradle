@@ -9,7 +9,7 @@ android {
         targetSdkVersion 26
 
         ndk {
-            moduleName "libjackpal-androidterm5"
+            moduleName "libjackpal-androidterm5nhj1"
             abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a', 'x86'
             ldLibs 'log', 'c'
         }
