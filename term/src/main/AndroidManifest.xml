@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <permission android:name="com.offsec.nhterm.permission.RUN_SCRIPT"
         android:label="@string/perm_run_script"
         android:description="@string/permdesc_run_script"
@@ -129,7 +131,7 @@
             android:label="@string/preferences"/>
         <activity android:name="com.offsec.nhterm.WindowList"
             android:label="@string/window_list" />
-        <service android:name="com.offsec.nhterm.TermService" >
+        <service android:name="com.offsec.nhterm.TermService" android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.offsec.nhterm.action.START_TERM.v1"/>
                 <category android:name="android.intent.category.DEFAULT"/>

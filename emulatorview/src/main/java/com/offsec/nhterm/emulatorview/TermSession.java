@@ -112,11 +112,12 @@ public class TermSession {
     private FinishCallback mFinishCallback;
 
     private boolean mIsRunning = false;
-    private final Handler mMsgHandler = new Handler() {
+
+    private final Handler mMsgHandler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(Message msg) {
+        public boolean handleMessage(Message msg) {
             if (!mIsRunning) {
-                return;
+                return false;
             }
             if (msg.what == NEW_INPUT) {
                 readFromProcess();
@@ -128,8 +129,9 @@ public class TermSession {
                     }
                 });
             }
+            return true;
         }
-    };
+        });
 
     private UpdateCallback mTitleChangedListener;
 
@@ -186,16 +188,17 @@ public class TermSession {
                 Looper.prepare();
 
                 Log.d("TermSession.java: ", "new Handler");
-                mWriterHandler = new Handler() {
+                mWriterHandler = new Handler(new Handler.Callback() {
                     @Override
-                    public void handleMessage(Message msg) {
+                    public boolean handleMessage(Message msg) {
                         if (msg.what == NEW_OUTPUT) {
                             writeToOutput();
                         } else if (msg.what == FINISH) {
                             Looper.myLooper().quit();
                         }
+                        return true;
                     }
-                };
+                });
 
                 // Drain anything in the queue from before we started
                 Log.d("TermSession.java: ", "writeToOutput()");

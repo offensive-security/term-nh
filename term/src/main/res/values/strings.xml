@@ -46,7 +46,9 @@
    <string name="service_notify_text">Terminal session is running</string>
 
    <string name="process_exit_message">Terminal session finished</string>
-
+   <!--Notification Channel-->
+   <string name="nh_term_notification_channel">nh_term</string>
+   <string name="nh_term_notification_channel_description">Notification for nh_term</string>
    <!-- Preference dialog -->
    <string name="screen_preferences">Screen</string>
 

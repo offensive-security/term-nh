@@ -15,7 +15,6 @@
  */
 
 package com.offsec.nhterm;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -35,6 +34,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -376,7 +376,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         Intent broadcast = new Intent(ACTION_PATH_BROADCAST);
         if (AndroidCompat.SDK >= 12) {
-            broadcast.addFlags(FLAG_INCLUDE_STOPPED_PACKAGES);
+            broadcast.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         }
         mPendingPathBroadcasts++;
         sendOrderedBroadcast(broadcast, PERMISSION_PATH_BROADCAST, mPathReceiver, null, RESULT_OK, null, null);
@@ -388,7 +388,6 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         TSIntent = new Intent(this, TermService.class);
         startService(TSIntent);
-
         if (AndroidCompat.SDK >= 11) {
             int actionBarMode = mSettings.actionBarMode();
             mActionBarMode = actionBarMode;
@@ -411,7 +410,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         setFunctionKeyListener();
 
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TermDebug.LOG_TAG);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.offsec.nhterm:TermDebug.LOG_TAG");
         WifiManager wm = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int wifiLockMode = WifiManager.WIFI_MODE_FULL;
         if (AndroidCompat.SDK >= 12) {

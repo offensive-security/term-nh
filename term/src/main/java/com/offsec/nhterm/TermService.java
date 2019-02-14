@@ -15,7 +15,7 @@
  */
 
 package com.offsec.nhterm;
-
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -31,14 +31,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
-import android.app.Notification;
+
 import android.support.v4.app.NotificationCompat;
 import android.app.PendingIntent;
 
-
-import com.offsec.nhterm.R;
 import com.offsec.nhterm.emulatorview.TermSession;
-
 import com.offsec.nhterm.compat.ServiceForegroundCompat;
 import com.offsec.nhterm.libtermexec.v1.*;
 import com.offsec.nhterm.util.SessionList;
@@ -51,9 +48,9 @@ public class TermService extends Service implements TermSession.FinishCallback
     /* Parallels the value of START_STICKY on API Level >= 5 */
     private static final int COMPAT_START_STICKY = 1;
 
-    private NotificationManager mNotificationManager;
-    private final int notifyID = 1;
-
+    private NotificationManager notificationManager;
+    private static final int notifyID = 1;
+    private static final String NH_TERM_CHANNEL_ID = "NH_TERM_CHANNEL";
     private static final int RUNNING_NOTIFICATION = 1;
     private ServiceForegroundCompat compat;
 
@@ -102,14 +99,28 @@ public class TermService extends Service implements TermSession.FinishCallback
         //compat = new ServiceForegroundCompat(this);
         mTermSessions = new SessionList();
 
-        mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            CharSequence name = getString(R.string.nh_term_notification_channel);
+            String description = getString(R.string.nh_term_notification_channel);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel mChannel = new NotificationChannel(NH_TERM_CHANNEL_ID, name, importance);
+            mChannel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            notificationManager = (NotificationManager) getSystemService(
+                    NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(mChannel);
+            }
+        }
 
         // Building the notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, NH_TERM_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_service_notification_icon) // notification icon
                 .setContentTitle(getText(R.string.application_terminal)) // main title of the notification
                 .setContentText(getText(R.string.service_notify_text)); // notification text
-                //.setContentIntent(pendingIntent); // notification intent
+        //.setContentIntent(pendingIntent); // notification intent
 
         Intent notifyIntent = new Intent(this, Term.class);
 
@@ -133,16 +144,16 @@ public class TermService extends Service implements TermSession.FinishCallback
         mBuilder.setContentIntent(resultPendingIntent);
 
         // mId allows you to update the notification later on.
-        mNotificationManager.notify(notifyID, mBuilder.build());
+        //notificationManager.notify(notifyID, mBuilder.build());
+        startForeground(notifyID, mBuilder.build());
 
-        //compat.startForeground(RUNNING_NOTIFICATION, notification);
         Log.d(TermDebug.LOG_TAG, "TermService started");
     }
 
     @Override
     public void onDestroy() {
         // Remove notification
-        mNotificationManager.cancel(notifyID);
+        notificationManager.cancel(notifyID);
 
         for (TermSession session : mTermSessions) {
             /* Don't automatically remove from list of sessions -- we clear the
