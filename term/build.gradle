@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion 28
     defaultConfig {
         applicationId 'com.offsec.nhterm'
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 26
+        targetSdkVersion 28
 
         ndk {
             moduleName "libjackpal-androidterm5nhj1"
-            abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a', 'x86'
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86'
             ldLibs 'log', 'c'
         }
     }
@@ -44,5 +43,5 @@ android {
 dependencies {
     implementation project(':emulatorview')
     implementation project(':libtermexec')
-    implementation "com.android.support:support-v4:+"
+    implementation 'com.android.support:support-v4:+'
 }
