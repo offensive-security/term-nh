@@ -152,6 +152,9 @@ public class TermService extends Service implements TermSession.FinishCallback
 
     @Override
     public void onDestroy() {
+        // invoking notificationManager.cancel on Android < 8 causes a null pointer exception so we should check first
+        if (notificationManager == null)
+            notificationManager = (NotificationManager)  getSystemService(NOTIFICATION_SERVICE);
         // Remove notification
         notificationManager.cancel(notifyID);
 
