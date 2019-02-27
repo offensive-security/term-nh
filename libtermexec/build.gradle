@@ -4,7 +4,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0-alpha09'
+        classpath 'com.android.tools.build:gradle:3.2.0'
     }
 }
 apply plugin: 'com.android.library'
@@ -19,6 +19,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
 
