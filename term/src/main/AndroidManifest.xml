@@ -49,6 +49,7 @@
         android:theme="@style/Theme">
         <activity android:name="com.offsec.nhterm.Term"
             android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
             <intent-filter>
